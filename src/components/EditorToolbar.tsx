@@ -156,7 +156,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
             onClick={() => {
               toast({
                 title: "Made with ❤️ by @NotoriousArnav",
-                description: "Click the Button to visit my Profile",
+                description: "Click the Button to visit the Repo",
                 duration: 5*1000,
                 action: (
                   <Button
@@ -164,10 +164,10 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
                     size="sm"
                     className="h-8 w-8 p-0"
                     onClick={() => {
-                      window.open("https://github.com/NotoriousArnav", "_blank");}}
-                      >
+                      window.open("https://github.com/NotoriousArnav/MarkdownEditor", "_blank");}}
+                  >
                       <Github />
-                    </Button>
+                  </Button>
                 ),
               })
             }}
