@@ -17,11 +17,11 @@ export const MarkdownPreview = ({ markdown }: MarkdownPreviewProps) => {
         remarkPlugins={[remarkGfm]} 
         rehypePlugins={[rehypeSanitize, rehypeRaw]}
         components={{
-          code({node, inline, className, children, ...props}) {
+          code({className, children, ...props}) {
             const match = /language-(\w+)/.exec(className || '');
-            return !inline && match ? (
+            return match ? (
               <SyntaxHighlighter
-                style={vscDarkPlus}
+                style={vscDarkPlus as any}
                 language={match[1]}
                 PreTag="div"
                 className="rounded-md border border-gray-200 bg-gray-900"
