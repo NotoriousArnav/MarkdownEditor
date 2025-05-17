@@ -1,6 +1,11 @@
 # Welcome to Markdown Editor
 Markdown Editor is a simple and lightweight Markdown editor built with React. It allows users to write and preview Markdown content in real-time.
 
+## Features
+- Supports Github, Notion, Dev.to and Medium markdown themes
+- Allows exporting to PDF
+- Minimal and Lightweight
+- No Server-side dependencies
 
 ## Running
 ### Install Dependencies

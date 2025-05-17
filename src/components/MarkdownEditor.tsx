@@ -169,6 +169,9 @@ export const MarkdownEditor = () => {
       case "save":
         handleSaveToLocalStorage();
         return;
+      case "pdfexport":
+        handleExportPDF();
+        return;
       default:
         break;
     }
