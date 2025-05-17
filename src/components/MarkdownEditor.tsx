@@ -5,6 +5,7 @@ import { WordCount } from "@/components/WordCount";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { HistoryManager } from "@/utils/historyManager";
+import html2pdf from "html2pdf.js";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -23,6 +24,7 @@ import { HistoryViewer } from "@/components/HistoryViewer";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
 import { text } from "stream/consumers";
+import { inlineAllStyles } from "@/lib/utils";
 
 export const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState<string>(() => {
@@ -114,6 +116,39 @@ export const MarkdownEditor = () => {
     setMarkdown(newValue);
     history.push(newValue);
   };
+
+  const handleExportPDF = () => {
+    const el = document.getElementById("mdwindow");
+    if (!el) return;
+
+    const htmlString = inlineAllStyles(el);
+
+    const opt = {
+      margin: 0.5,
+      filename: 'markdown.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    const doc = iframe.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<html><body>${htmlString}</body></html>`);
+      doc.close();
+
+      html2pdf().set(opt).from(doc.body).save().then(() => {
+        iframe.remove();
+      });
+    }
+  };
+
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  window.handleExportPDF = handleExportPDF; // Expose function to global scope for debugging.
 
   const handleToolbarAction = (action: string) => {
     const textarea = textareaRef.current;
@@ -400,16 +435,6 @@ export const MarkdownEditor = () => {
           </div>
         )}
       </div>
-      
-      {/* <div className="mt-3 flex justify-end">
-        <Button 
-          onClick={() => setIsPreviewMode(!isPreviewMode)}
-          variant="outline"
-          className="text-sm"
-        >
-          {isPreviewMode ? "Edit" : "Preview"}
-        </Button>
-      </div> */}
 
       <ThemeSelector 
         isOpen={themeDialogOpen}

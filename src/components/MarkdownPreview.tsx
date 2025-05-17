@@ -10,6 +10,7 @@ import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { MarkdownTheme } from '@/utils/themeOptions';
+import { inlineAllStyles } from '@/lib/utils';
 
 interface MarkdownPreviewProps {
   markdown: string;
@@ -19,6 +20,10 @@ interface MarkdownPreviewProps {
 export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
   const { toast } = useToast();
   
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  window.inlineAllStyles = inlineAllStyles;
+
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     toast({
@@ -29,7 +34,7 @@ export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
   };
   
   return (
-    <div className={`p-4 prose prose-sm md:prose-base max-w-none overflow-auto h-full markdown-preview dark:prose-invert markdown-theme-${theme}`}>
+    <div id="mdwindow" className={`p-4 prose prose-sm md:prose-base max-w-none overflow-auto h-full markdown-preview dark:prose-invert markdown-theme-${theme}`}>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]} 
         rehypePlugins={[rehypeSanitize, rehypeRaw]}
