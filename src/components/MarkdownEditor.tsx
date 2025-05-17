@@ -5,6 +5,16 @@ import { EditorToolbar } from "@/components/EditorToolbar";
 import { WordCount } from "@/components/WordCount";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { HistoryManager } from "@/utils/historyManager";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { Save, Undo, Redo, Palette } from "lucide-react";
+import { ThemeSelector } from "@/components/ThemeSelector";
+import { MarkdownTheme } from "@/utils/themeOptions";
 
 export const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState<string>(() => {
@@ -12,19 +22,42 @@ export const MarkdownEditor = () => {
     return saved || "# Hello World\n\nStart writing your markdown here...";
   });
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [history] = useState(() => new HistoryManager<string>(markdown));
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+  const [themeDialogOpen, setThemeDialogOpen] = useState(false);
+  const [markdownTheme, setMarkdownTheme] = useState<MarkdownTheme>(() => {
+    return (localStorage.getItem("markdown-theme") as MarkdownTheme) || "github";
+  });
+  
   const { toast } = useToast();
+
+  // Update history control states
+  useEffect(() => {
+    setCanUndo(history.canUndo());
+    setCanRedo(history.canRedo());
+  }, [markdown, history]);
 
   // Save to localStorage whenever markdown changes
   useEffect(() => {
     localStorage.setItem("markdown-content", markdown);
   }, [markdown]);
 
+  // Save theme preference to localStorage
+  useEffect(() => {
+    localStorage.setItem("markdown-theme", markdownTheme);
+  }, [markdownTheme]);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMarkdown(e.target.value);
+    const newValue = e.target.value;
+    setMarkdown(newValue);
+    history.push(newValue);
   };
 
   const handleInsertText = (text: string) => {
-    setMarkdown((prev) => prev + text);
+    const newValue = markdown + text;
+    setMarkdown(newValue);
+    history.push(newValue);
   };
 
   const handleToolbarAction = (action: string) => {
@@ -77,20 +110,36 @@ export const MarkdownEditor = () => {
         break;
       case "clear":
         if (window.confirm("Are you sure you want to clear the editor?")) {
-          setMarkdown("");
+          const newValue = "";
+          setMarkdown(newValue);
+          history.push(newValue);
         }
         return;
+      case "undo":
+        const previousState = history.undo();
+        if (previousState !== undefined) {
+          setMarkdown(previousState);
+        }
+        return;
+      case "redo":
+        const nextState = history.redo();
+        if (nextState !== undefined) {
+          setMarkdown(nextState);
+        }
+        return;
+      case "theme":
+        setThemeDialogOpen(true);
+        return;
       case "save":
-        toast({
-          title: "Content Saved",
-          description: "Your markdown has been saved to local storage.",
-        });
+        // Save handled by dropdown menu now
         return;
       default:
         return;
     }
     
-    setMarkdown(beforeSelection + replacement + afterSelection);
+    const newValue = beforeSelection + replacement + afterSelection;
+    setMarkdown(newValue);
+    history.push(newValue);
     
     // After state update, focus and set cursor position after inserted text
     setTimeout(() => {
@@ -100,8 +149,85 @@ export const MarkdownEditor = () => {
     }, 0);
   };
 
+  const handleSaveToLocalStorage = () => {
+    localStorage.setItem("markdown-content", markdown);
+    toast({
+      title: "Content Saved",
+      description: "Your markdown has been saved to local storage.",
+    });
+  };
+
+  const handleSaveToFile = () => {
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'document.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "File Downloaded",
+      description: "Your markdown has been saved to disk.",
+    });
+  };
+
   return (
     <div className="flex flex-col h-full max-h-[calc(100vh-12rem)]">
+      <div className="flex justify-between items-center mb-3">
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => handleToolbarAction("undo")}
+            disabled={!canUndo}
+            title="Undo"
+          >
+            <Undo size={16} />
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => handleToolbarAction("redo")}
+            disabled={!canRedo}
+            title="Redo"
+          >
+            <Redo size={16} />
+          </Button>
+        </div>
+        
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleToolbarAction("theme")}
+            title="Change theme"
+          >
+            <Palette size={16} className="mr-1" />
+            Theme
+          </Button>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="default" size="sm">
+                <Save size={16} className="mr-1" />
+                Save
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={handleSaveToLocalStorage}>
+                Save to Browser
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSaveToFile}>
+                Download .md File
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      
       <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
       
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row flex-1 overflow-hidden">
@@ -121,7 +247,7 @@ export const MarkdownEditor = () => {
         
         {(!isPreviewMode && window.innerWidth >= 768) || isPreviewMode ? (
           <div className={`flex-1 ${!isPreviewMode && window.innerWidth >= 768 ? "border-l border-gray-200 dark:border-gray-700" : ""} overflow-auto`}>
-            <MarkdownPreview markdown={markdown} />
+            <MarkdownPreview markdown={markdown} theme={markdownTheme} />
           </div>
         ) : null}
       </div>
@@ -135,6 +261,13 @@ export const MarkdownEditor = () => {
           {isPreviewMode ? "Edit" : "Preview"}
         </Button>
       </div>
+
+      <ThemeSelector 
+        isOpen={themeDialogOpen}
+        onClose={() => setThemeDialogOpen(false)}
+        currentTheme={markdownTheme}
+        onThemeChange={setMarkdownTheme}
+      />
     </div>
   );
 };

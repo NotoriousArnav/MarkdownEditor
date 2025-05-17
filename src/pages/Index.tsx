@@ -1,6 +1,7 @@
 
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import "../components/markdown-themes.css";
 
 const Index = () => {
   return (

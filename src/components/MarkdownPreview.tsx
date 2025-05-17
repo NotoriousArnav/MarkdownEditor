@@ -9,12 +9,14 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { MarkdownTheme } from '@/utils/themeOptions';
 
 interface MarkdownPreviewProps {
   markdown: string;
+  theme: MarkdownTheme;
 }
 
-export const MarkdownPreview = ({ markdown }: MarkdownPreviewProps) => {
+export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
   const { toast } = useToast();
   
   const handleCopyCode = (code: string) => {
@@ -27,7 +29,7 @@ export const MarkdownPreview = ({ markdown }: MarkdownPreviewProps) => {
   };
   
   return (
-    <div className="p-4 prose prose-sm md:prose-base max-w-none overflow-auto h-full markdown-preview dark:prose-invert">
+    <div className={`p-4 prose prose-sm md:prose-base max-w-none overflow-auto h-full markdown-preview dark:prose-invert markdown-theme-${theme}`}>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]} 
         rehypePlugins={[rehypeSanitize, rehypeRaw]}

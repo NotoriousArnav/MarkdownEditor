@@ -1,0 +1,83 @@
+
+/* GitHub theme */
+.markdown-theme-github {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+.markdown-theme-github h1 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #eaecef;
+}
+.markdown-theme-github h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #eaecef;
+}
+.dark .markdown-theme-github h1,
+.dark .markdown-theme-github h2 {
+  border-color: #333;
+}
+
+/* Notion theme */
+.markdown-theme-notion {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.7;
+}
+.markdown-theme-notion h1 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+.markdown-theme-notion p {
+  margin-bottom: 1em;
+}
+.markdown-theme-notion blockquote {
+  background-color: rgba(235, 236, 237, 0.3);
+  border-left: 4px solid #e1e1e1;
+  padding: 0.5em 1em;
+}
+.dark .markdown-theme-notion blockquote {
+  background-color: rgba(55, 55, 55, 0.3);
+  border-left-color: #555;
+}
+
+/* Medium theme */
+.markdown-theme-medium {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  line-height: 1.8;
+  font-size: 1.1em;
+}
+.markdown-theme-medium h1 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-weight: 700;
+  font-size: 2.25em;
+}
+.markdown-theme-medium h2 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-weight: 700;
+  font-size: 1.75em;
+}
+.markdown-theme-medium p {
+  margin-bottom: 1.25em;
+}
+
+/* Dev.to theme */
+.markdown-theme-devto {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.75;
+}
+.markdown-theme-devto h1 {
+  font-size: 2.25em;
+  font-weight: 800;
+}
+.markdown-theme-devto h2 {
+  font-size: 1.75em;
+  font-weight: 700;
+}
+.markdown-theme-devto a {
+  color: #3b49df;
+  text-decoration: none;
+}
+.dark .markdown-theme-devto a {
+  color: #58a6ff;
+}
+.markdown-theme-devto p {
+  margin-bottom: 1.25em;
+}
