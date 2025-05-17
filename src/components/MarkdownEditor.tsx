@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useCallback, useRef } from "react";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
 import { EditorToolbar } from "@/components/EditorToolbar";
@@ -188,7 +187,16 @@ export const MarkdownEditor = () => {
         setHistoryViewerOpen(true);
         return;
       case "save":
-        // Save handled by dropdown menu now
+        handleSaveToLocalStorage();
+        return;
+      case "download":
+        handleSaveToFile();
+        return;
+      case "preview":
+        setIsPreviewMode(true);
+        return;
+      case "edit":
+        setIsPreviewMode(false);
         return;
       default:
         return;
@@ -206,6 +214,9 @@ export const MarkdownEditor = () => {
     }, 0);
   };
 
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
   const handleSaveToLocalStorage = () => {
     localStorage.setItem("markdown-content", markdown);
     toast({
@@ -252,68 +263,13 @@ export const MarkdownEditor = () => {
     setHistoryViewerOpen(true);
   });
 
+  useHotkeys('ctrl+e', (e) => {
+    e.preventDefault();
+    setIsPreviewMode(!isPreviewMode);
+  });
+
   return (
-    <div className="flex flex-col h-full max-h-[calc(100vh-12rem)]">
-      <div className="flex justify-between items-center mb-3">
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => handleToolbarAction("undo")}
-            disabled={!canUndo}
-            title="Undo (Ctrl+Z)"
-          >
-            <Undo size={16} />
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => handleToolbarAction("redo")}
-            disabled={!canRedo}
-            title="Redo (Ctrl+Y)"
-          >
-            <Redo size={16} />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleToolbarAction("history")}
-            title="History (Ctrl+H)"
-          >
-            <History size={16} className="mr-1" />
-            History
-          </Button>
-        </div>
-        
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleToolbarAction("theme")}
-            title="Change theme"
-          >
-            <Palette size={16} className="mr-1" />
-            Theme
-          </Button>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="default" size="sm">
-                <Save size={16} className="mr-1" />
-                Save
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={handleSaveToLocalStorage}>
-                Save to Browser
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSaveToFile}>
-                Download .md File
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+    <div className="flex flex-col h-full max-h-[calc(100vh-12rem)] overflow-hidden">
       
       <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
       
@@ -351,7 +307,7 @@ export const MarkdownEditor = () => {
         )}
       </div>
       
-      <div className="mt-3 flex justify-end">
+      {/* <div className="mt-3 flex justify-end">
         <Button 
           onClick={() => setIsPreviewMode(!isPreviewMode)}
           variant="outline"
@@ -359,7 +315,7 @@ export const MarkdownEditor = () => {
         >
           {isPreviewMode ? "Edit" : "Preview"}
         </Button>
-      </div>
+      </div> */}
 
       <ThemeSelector 
         isOpen={themeDialogOpen}

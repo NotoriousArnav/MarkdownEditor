@@ -3,23 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Bold, Italic, Heading1, Heading2, Heading3, Link, Image, Code, Quote, List, ListOrdered, 
-  Trash2, Save, Eye, Edit
+  Trash2, Save, Eye, Edit, Undo, Redo, History, Download, Palette
 } from "lucide-react";
-
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { toast } from "sonner";
 interface EditorToolbarProps {
   onAction: (action: string) => void;
   isPreviewMode: boolean;
 }
 
 export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) => {
-  if (isPreviewMode) {
-    return (
-      <div className="py-2 mb-2 flex justify-between items-center">
-        <span className="text-lg font-medium text-gray-700 dark:text-gray-200">Preview Mode</span>
-      </div>
-    );
-  }
-
+  // Define the toolbar items
   const tools = [
     { icon: <Bold size={16} />, name: "bold", tooltip: "Bold" },
     { icon: <Italic size={16} />, name: "italic", tooltip: "Italic" },
@@ -35,12 +29,56 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
   ];
 
   const actions = [
+    { icon: <Undo size={16} />, name: "undo", tooltip: "Undo"},
+    { icon: <Redo size={16} />, name: "redo", tooltip: "Redo" },
+    { icon: <History size={16} />, name: "history", tooltip: "History" },
     { icon: <Trash2 size={16} />, name: "clear", tooltip: "Clear Editor", className: "text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300" },
-    { icon: <Save size={16} />, name: "save", tooltip: "Save", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+    { icon: <Save size={16} />, name: "save", tooltip: "Save to Browser", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+    { icon: <Download size={16} />, name: "download", tooltip: "Download", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+    { icon: <Palette size={16} />, name: "theme", tooltip: "Change Theme"},
+    { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },
   ];
 
+  const extraActions: { icon: JSX.Element; name: string; tooltip: string; className?: string }[] = [
+    { icon: <Eye size={16} />, name: "preview", tooltip: "Preview" },
+  ];
+
+  const previewModeToolbar = [
+    { icon: <Edit size={16} />, name: "edit", tooltip: "Edit" },
+    { icon: <Download size={16} />, name: "download", tooltip: "Download", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+  ];
+
+  if (isPreviewMode) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2 mb-3 flex flex-wrap items-center gap-1">
+        <TooltipProvider>
+          {previewModeToolbar.map((tool) => (
+            <Tooltip key={tool.name}>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`h-8 w-8 p-0 ${tool.className || ""}`}
+                  onClick={() => onAction(tool.name)}
+                >
+                  {tool.icon}
+                  <span className="sr-only">{tool.tooltip}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{tool.tooltip}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </TooltipProvider>
+      </div>
+    )
+  }
+
+  /* This is Edit mode Toolbar */
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2 mb-3 flex flex-wrap items-center gap-1">
+      
       <TooltipProvider>
         {tools.map((tool) => (
           <Tooltip key={tool.name}>
@@ -64,6 +102,25 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
         <div className="h-8 border-r border-gray-200 dark:border-gray-700 mx-1"></div>
         
         {actions.map((action) => (
+          <Tooltip key={action.name}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`h-8 w-8 p-0 ${action.className || ""}`}
+                onClick={() => onAction(action.name)}
+              >
+                {action.icon}
+                <span className="sr-only">{action.tooltip}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{action.tooltip}</p>
+            </TooltipContent>
+          </Tooltip>
+        ))}
+        <div className="h-8 border-r border-gray-200 dark:border-gray-700 mx-1"></div>
+        {extraActions.map((action) => (
           <Tooltip key={action.name}>
             <TooltipTrigger asChild>
               <Button
