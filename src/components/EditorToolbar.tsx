@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Bold, Italic, Heading1, Heading2, Heading3, Link, Image, Code, Quote, List, ListOrdered, 
-  Trash2, Save, Eye, Edit, Undo, Redo, History, Download, Palette, Keyboard, FileText, Github
+  Trash2, Save, Eye, Edit, Undo, Redo, History, Download, Palette, Keyboard, FileText, Github,
+  FolderOpen, FolderOpenDot
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useToast } from "@/components/ui/use-toast";
@@ -29,21 +30,23 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <Quote size={24} />, name: "quote", tooltip: "Quote" },
     { icon: <List size={24} />, name: "list", tooltip: "Bullet List" },
     { icon: <ListOrdered size={24} />, name: "orderedList", tooltip: "Numbered List" },
-    { icon: <Palette size={24} />, name: "theme", tooltip: "Change Markdown Theme"},
   ];
 
   const actions = [
+    { icon: <Keyboard size={24} />, name: "keybinds", tooltip: "Keyboard Shortcuts" },
     { icon: <Undo size={24} />, name: "undo", tooltip: "Undo"},
     { icon: <Redo size={24} />, name: "redo", tooltip: "Redo" },
     { icon: <History size={24} />, name: "history", tooltip: "History" },
     { icon: <Trash2 size={24} />, name: "clear", tooltip: "Clear Editor", className: "text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300" },
+    { icon: <FolderOpen size={24} />, name: "openfile", tooltip: "Open File", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+    { icon: <FolderOpenDot size={24} />, name: "openfetch", tooltip: "Open Remote File", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Save size={24} />, name: "save", tooltip: "Save to Browser", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
   ];
   
   const extraActions: { icon: JSX.Element; name: string; tooltip: string; className?: string }[] = [
+    { icon: <Palette size={24} />, name: "theme", tooltip: "Change Markdown Theme"},
     { icon: <Eye size={24} />, name: "preview", tooltip: "Preview" },
-    { icon: <Keyboard size={24} />, name: "keybinds", tooltip: "Keyboard Shortcuts" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
     { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },
   ];

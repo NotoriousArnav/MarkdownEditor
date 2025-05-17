@@ -21,10 +21,11 @@ import { Save, Undo, Redo, Palette, History } from "lucide-react";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { MarkdownTheme } from "@/utils/themeOptions";
 import { HistoryViewer } from "@/components/HistoryViewer";
+import { FetchFromHTTP } from "@/components/FetchFromHTTP";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
 import { text } from "stream/consumers";
-import { inlineAllStyles } from "@/lib/utils";
+import { inlineAllStyles, fetchFromUrl } from "@/lib/utils";
 
 export const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState<string>(() => {
@@ -32,6 +33,7 @@ export const MarkdownEditor = () => {
     return saved || "# Hello World\n\nStart writing your markdown here...";
   });
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isFetchDialogOpen, setShowFetchDialog] = useState(false);
   const [history] = useState(() => new HistoryManager<string>(markdown));
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
@@ -276,6 +278,17 @@ export const MarkdownEditor = () => {
       case "history":
         setHistoryViewerOpen(true);
         return;
+      case "openfetch":
+        setShowFetchDialog(true);
+        return;
+      case "openfile":
+        const inputElement = document.querySelector('#fileOpen');
+        if (inputElement) {
+          inputElement.click();
+        }
+        return;
+      case "fetch":
+        return;
       default:
         return;
     }
@@ -296,13 +309,51 @@ export const MarkdownEditor = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
   
-  const handleSaveToLocalStorage = () => {
+  const handleSaveToLocalStorage = (dnd?: boolean) => {
     localStorage.setItem("markdown-content", markdown);
+    if (dnd) return dnd;
     toast({
       title: "Content Saved",
       description: "Your markdown has been saved to local storage.",
     });
+    return dnd;
   };
+
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  window.handleSaveToLocalStorage = handleSaveToLocalStorage;
+
+  var intervalId = setInterval(() => {
+    handleSaveToLocalStorage(true)
+  }, 5000);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target?.result as string;
+        if (window.confirm("Are you sure you want to replace the current content with the uploaded file?")) {
+          setMarkdown(content);
+        }
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  const handleFetchFromUrl = (url: string) => {
+    setShowFetchDialog(false);
+    if (!url) return;
+    fetchFromUrl(url)
+      .then((data) => {
+      setMarkdown(data);
+    })
+      .catch((error) => {
+        alert(`Could not fetch document from ${url}`);
+        console.error("Error fetching data:", error);
+      })
+    console.log("url:", url);
+  }
 
   const handleSaveToFile = () => {
     const blob = new Blob([markdown], { type: 'text/markdown' });
@@ -320,6 +371,7 @@ export const MarkdownEditor = () => {
       description: "Your markdown has been saved to disk.",
     });
   };
+
 
   // Register keyboard shortcuts
   // TODO: Add more shortcuts
@@ -456,6 +508,13 @@ export const MarkdownEditor = () => {
           history.push(content);
         }}
       />
+
+      <FetchFromHTTP
+        isOpen={isFetchDialogOpen}
+        onClose={handleFetchFromUrl}
+      />
+
+      <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
     </div>
   );
 };
