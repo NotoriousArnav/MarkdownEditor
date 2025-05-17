@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import axios from "axios";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -24,3 +25,12 @@ export function inlineAllStyles(el: HTMLElement): string {
   walk(clone);
   return clone.outerHTML;
 }
+
+export async function fetchFromUrl(url: string) {
+  const result = await axios.get(url);
+  return result.data
+}
+
+// @ts-ignore
+// eslint-disable-next-line
+window.fetchFromUrl = fetchFromUrl

@@ -7,6 +7,8 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   base: "/MarkdownEditor/",
   server: {
+    allowedHosts: true,
+    cors: true,
     host: "::",
     port: 8080,
   },
