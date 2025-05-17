@@ -20,7 +20,10 @@ import { Save, Undo, Redo, Palette, History } from "lucide-react";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { MarkdownTheme } from "@/utils/themeOptions";
 import { HistoryViewer } from "@/components/HistoryViewer";
+import { KeybindViewer } from "./KeyboardShortcuts";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
+import { text } from "stream/consumers";
 
 export const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState<string>(() => {
@@ -115,53 +118,85 @@ export const MarkdownEditor = () => {
 
   const handleToolbarAction = (action: string) => {
     const textarea = textareaRef.current;
-    if (!textarea) return;
 
+    switch (action) {
+      case "preview":
+        setIsPreviewMode(!isPreviewMode);
+        return;
+      case "edit":
+        setIsPreviewMode(false);
+        return;
+      case "download":
+        handleSaveToFile();
+        return;
+      case "theme":
+        setThemeDialogOpen(true);
+        return;
+      case "save":
+        handleSaveToLocalStorage();
+        return;
+      default:
+        break;
+    }
+
+    if (!textarea) return;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = markdown.substring(start, end);
     const beforeSelection = markdown.substring(0, start);
     const afterSelection = markdown.substring(end);
-    
+
     let replacement = "";
     
     switch (action) {
       case "bold":
+        if (!textarea) return;
         replacement = `**${selectedText || "bold text"}**`;
         break;
       case "italic":
+        if (!textarea) return;
         replacement = `*${selectedText || "italic text"}*`;
         break;
       case "heading1":
+        if (!textarea) return;
         replacement = `# ${selectedText || "Heading 1"}`;
         break;
       case "heading2":
+        if (!textarea) return;
         replacement = `## ${selectedText || "Heading 2"}`;
         break;
       case "heading3":
+        if (!textarea) return;
         replacement = `### ${selectedText || "Heading 3"}`;
         break;
       case "link":
+        if (!textarea) return;
         replacement = `[${selectedText || "link text"}](url)`;
         break;
       case "image":
+        if (!textarea) return;
         replacement = `![${selectedText || "alt text"}](image-url)`;
         break;
       case "code":
+        if (!textarea) return;
         replacement = selectedText.includes("\n")
           ? `\`\`\`\n${selectedText || "code block"}\n\`\`\``
           : `\`${selectedText || "inline code"}\``;
         break;
       case "quote":
+        if (!textarea) return;
         replacement = `> ${selectedText || "quote"}`;
         break;
       case "list":
+        if (!textarea) return;
         replacement = `- ${selectedText || "list item"}`;
         break;
       case "orderedList":
+        if (!textarea) return;
         replacement = `1. ${selectedText || "list item"}`;
         break;
       case "clear":
+        if (!textarea) return;
         if (window.confirm("Are you sure you want to clear the editor?")) {
           const newValue = "";
           setMarkdown(newValue);
@@ -169,34 +204,21 @@ export const MarkdownEditor = () => {
         }
         return;
       case "undo":
+        if (!textarea) return;
         const previousState = history.undo();
         if (previousState !== undefined) {
           setMarkdown(previousState);
         }
         return;
       case "redo":
+        if (!textarea) return;
         const nextState = history.redo();
         if (nextState !== undefined) {
           setMarkdown(nextState);
         }
         return;
-      case "theme":
-        setThemeDialogOpen(true);
-        return;
       case "history":
         setHistoryViewerOpen(true);
-        return;
-      case "save":
-        handleSaveToLocalStorage();
-        return;
-      case "download":
-        handleSaveToFile();
-        return;
-      case "preview":
-        setIsPreviewMode(true);
-        return;
-      case "edit":
-        setIsPreviewMode(false);
         return;
       default:
         return;
@@ -217,6 +239,7 @@ export const MarkdownEditor = () => {
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
+  
   const handleSaveToLocalStorage = () => {
     localStorage.setItem("markdown-content", markdown);
     toast({
@@ -243,6 +266,8 @@ export const MarkdownEditor = () => {
   };
 
   // Register keyboard shortcuts
+  // TODO: Add more shortcuts
+  // TODO: Use for loop to register shortcuts
   useHotkeys('ctrl+s', (e) => {
     e.preventDefault();
     handleSaveToLocalStorage();
@@ -269,7 +294,7 @@ export const MarkdownEditor = () => {
   });
 
   return (
-    <div className="flex flex-col h-full max-h-[calc(100vh-12rem)] overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden">
       
       <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
       
@@ -333,6 +358,10 @@ export const MarkdownEditor = () => {
           setMarkdown(content);
           history.push(content);
         }}
+      />
+      <KeybindViewer
+        isOpen={false}
+        onClose={() => {}}
       />
     </div>
   );
