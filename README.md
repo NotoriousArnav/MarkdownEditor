@@ -6,8 +6,17 @@ Markdown Editor is a simple and lightweight Markdown editor built with React. It
 - Allows exporting to PDF
 - Minimal and Lightweight
 - No Server-side dependencies
+- Autosave
+- **TODO:** Add File Sharing Support
+- **TODO:** Add Toggle Preview Mode using URL bar
+- File Open, Local and Remote
 
 ## Running
+### Clone Repo
+To clone this Repo:
+```bash
+git clone https://github.com/NotoriousArnav/MarkdownEditor.git
+```
 ### Install Dependencies
 To Install Dependencies run:
 ```bash
@@ -29,4 +38,4 @@ npm run build
 To build the application for development, use the following command:
 ```bash
 npm run build:dev
-```
+```%

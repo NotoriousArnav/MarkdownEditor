@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { 
   Bold, Italic, Heading1, Heading2, Heading3, Link, Image, Code, Quote, List, ListOrdered, 
   Trash2, Save, Eye, Edit, Undo, Redo, History, Download, Palette, Keyboard, FileText, Github,
-  FolderOpen, FolderOpenDot
+  FolderOpen, CloudDownload, Share
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useToast } from "@/components/ui/use-toast";
@@ -39,12 +39,13 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <History size={24} />, name: "history", tooltip: "History" },
     { icon: <Trash2 size={24} />, name: "clear", tooltip: "Clear Editor", className: "text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300" },
     { icon: <FolderOpen size={24} />, name: "openfile", tooltip: "Open File", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
-    { icon: <FolderOpenDot size={24} />, name: "openfetch", tooltip: "Open Remote File", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+    { icon: <CloudDownload size={24} />, name: "openfetch", tooltip: "Open Remote File", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Save size={24} />, name: "save", tooltip: "Save to Browser", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
   ];
   
   const extraActions: { icon: JSX.Element; name: string; tooltip: string; className?: string }[] = [
+    { icon: <Share size={24} />, name: "share", tooltip: "Share", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Palette size={24} />, name: "theme", tooltip: "Change Markdown Theme"},
     { icon: <Eye size={24} />, name: "preview", tooltip: "Preview" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
@@ -53,7 +54,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
 
   const previewModeToolbar = [
     { icon: <Edit size={24} />, name: "edit", tooltip: "Edit" },
-    { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+    { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-800 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
     { icon: <Palette size={24} />, name: "theme", tooltip: "Change Theme"},
     { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },

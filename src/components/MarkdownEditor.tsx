@@ -46,6 +46,30 @@ export const MarkdownEditor = () => {
   
   const { toast } = useToast();
 
+  //Check if url has ?preview=true
+  const url = new URL(window.location.href);
+  useEffect(() => {
+    if (url.searchParams.get("preview") === "true") {
+      setIsPreviewMode(true);
+    }
+  }, []);
+
+  //Check if User added fetchFrom=some.url
+  useEffect(() => {
+    const fetchFrom = url.searchParams.get("fetchFrom");
+    if (fetchFrom) {
+      fetchFromUrl(fetchFrom)
+        .then((data) => {
+          setMarkdown(data);
+        })
+        .catch((error) => {
+          alert(`Could not fetch document from ${fetchFrom}`);
+          console.error("Error fetching data:", error);
+        })
+    }
+  }, []);
+  
+
   // Update history control states
   useEffect(() => {
     setCanUndo(history.canUndo());
