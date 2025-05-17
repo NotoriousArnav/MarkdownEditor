@@ -15,7 +15,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
   if (isPreviewMode) {
     return (
       <div className="py-2 mb-2 flex justify-between items-center">
-        <span className="text-lg font-medium text-gray-700">Preview Mode</span>
+        <span className="text-lg font-medium text-gray-700 dark:text-gray-200">Preview Mode</span>
       </div>
     );
   }
@@ -35,12 +35,12 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
   ];
 
   const actions = [
-    { icon: <Trash2 size={16} />, name: "clear", tooltip: "Clear Editor", className: "text-red-500 hover:text-red-600" },
-    { icon: <Save size={16} />, name: "save", tooltip: "Save", className: "text-blue-500 hover:text-blue-600" },
+    { icon: <Trash2 size={16} />, name: "clear", tooltip: "Clear Editor", className: "text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300" },
+    { icon: <Save size={16} />, name: "save", tooltip: "Save", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 mb-3 flex flex-wrap items-center gap-1">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2 mb-3 flex flex-wrap items-center gap-1">
       <TooltipProvider>
         {tools.map((tool) => (
           <Tooltip key={tool.name}>
@@ -61,7 +61,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
           </Tooltip>
         ))}
         
-        <div className="h-8 border-r border-gray-200 mx-1"></div>
+        <div className="h-8 border-r border-gray-200 dark:border-gray-700 mx-1"></div>
         
         {actions.map((action) => (
           <Tooltip key={action.name}>

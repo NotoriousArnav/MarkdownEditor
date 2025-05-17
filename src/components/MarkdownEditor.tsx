@@ -104,23 +104,23 @@ export const MarkdownEditor = () => {
     <div className="flex flex-col h-full max-h-[calc(100vh-12rem)]">
       <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
       
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col md:flex-row flex-1 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row flex-1 overflow-hidden">
         {!isPreviewMode && (
           <div className="flex-1 flex flex-col min-w-0">
             <textarea
               value={markdown}
               onChange={handleChange}
-              className="flex-1 p-4 resize-none focus:outline-none font-mono text-sm leading-relaxed"
+              className="flex-1 p-4 resize-none focus:outline-none font-mono text-sm leading-relaxed bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               placeholder="Start writing your markdown here..."
             />
-            <div className="border-t border-gray-200 p-2 bg-gray-50">
+            <div className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
               <WordCount text={markdown} />
             </div>
           </div>
         )}
         
         {(!isPreviewMode && window.innerWidth >= 768) || isPreviewMode ? (
-          <div className={`flex-1 ${!isPreviewMode && window.innerWidth >= 768 ? "border-l border-gray-200" : ""} overflow-auto`}>
+          <div className={`flex-1 ${!isPreviewMode && window.innerWidth >= 768 ? "border-l border-gray-200 dark:border-gray-700" : ""} overflow-auto`}>
             <MarkdownPreview markdown={markdown} />
           </div>
         ) : null}
