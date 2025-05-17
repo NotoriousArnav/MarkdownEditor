@@ -20,7 +20,6 @@ import { Save, Undo, Redo, Palette, History } from "lucide-react";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { MarkdownTheme } from "@/utils/themeOptions";
 import { HistoryViewer } from "@/components/HistoryViewer";
-import { KeybindViewer } from "./KeyboardShortcuts";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
 import { text } from "stream/consumers";
@@ -149,6 +148,25 @@ export const MarkdownEditor = () => {
     let replacement = "";
     
     switch (action) {
+      case "keybinds":
+        alert(`Keyboard Shortcuts:
+          Ctrl + S: Save to Local Storage
+          Ctrl + Z: Undo
+          Ctrl + Y: Redo
+          Ctrl + H: Show History
+          Ctrl + E: Toggle Preview
+          Ctrl + B: Bold
+          Ctrl + I: Italic
+          Ctrl + 1: Heading 1
+          Ctrl + 2: Heading 2
+          Ctrl + 3: Heading 3
+          Ctrl + L: Link
+          Ctrl + Shift + I: Image
+          Ctrl + \`: Code
+          Ctrl + Q: Quote
+          
+          `)
+        return;
       case "bold":
         if (!textarea) return;
         replacement = `**${selectedText || "bold text"}**`;
@@ -267,12 +285,63 @@ export const MarkdownEditor = () => {
 
   // Register keyboard shortcuts
   // TODO: Add more shortcuts
-  // TODO: Use for loop to register shortcuts
   useHotkeys('ctrl+s', (e) => {
     e.preventDefault();
     handleSaveToLocalStorage();
   });
   
+  useHotkeys('ctrl+b', (e) => {
+    e.preventDefault();
+    handleToolbarAction("bold");
+  });
+  useHotkeys('ctrl+i', (e) => {
+    e.preventDefault();
+    handleToolbarAction("italic");
+  });
+
+  useHotkeys('ctrl+1', (e) => {
+    e.preventDefault();
+    handleToolbarAction("heading1");
+  });
+  useHotkeys('ctrl+2', (e) => {
+    e.preventDefault();
+    handleToolbarAction("heading2");
+  });
+  useHotkeys('ctrl+3', (e) => {
+    e.preventDefault();
+    handleToolbarAction("heading3");
+  });
+
+  useHotkeys('ctrl+l', (e) => {
+    e.preventDefault();
+    handleToolbarAction("link");
+  });
+
+  useHotkeys('ctrl+shift+i', (e) => {
+    e.preventDefault();
+    handleToolbarAction("image");
+  });
+
+  useHotkeys('ctrl+`', (e) => {
+    e.preventDefault();
+    handleToolbarAction("code");
+  });
+
+  useHotkeys('ctrl+q', (e) => {
+    e.preventDefault();
+    handleToolbarAction("quote");
+  });
+
+  useHotkeys('ctrl+shift+8', (e) => {
+    e.preventDefault();
+    handleToolbarAction("list");
+  });
+
+  useHotkeys('ctrl+shift+7', (e) => {
+    e.preventDefault();
+    handleToolbarAction("orderedList");
+  });
+
   useHotkeys('ctrl+z', (e) => {
     e.preventDefault();
     handleToolbarAction("undo");
@@ -358,10 +427,6 @@ export const MarkdownEditor = () => {
           setMarkdown(content);
           history.push(content);
         }}
-      />
-      <KeybindViewer
-        isOpen={false}
-        onClose={() => {}}
       />
     </div>
   );

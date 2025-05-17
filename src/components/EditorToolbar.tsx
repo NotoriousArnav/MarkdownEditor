@@ -41,7 +41,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
 
   const extraActions: { icon: JSX.Element; name: string; tooltip: string; className?: string }[] = [
     { icon: <Eye size={24} />, name: "preview", tooltip: "Preview" },
-    { icon: <Keyboard size={24} />, name: "keyboardShortcuts", tooltip: "Keyboard Shortcuts" },
+    { icon: <Keyboard size={24} />, name: "keybinds", tooltip: "Keyboard Shortcuts" },
   ];
 
   const previewModeToolbar = [
