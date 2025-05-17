@@ -42,4 +42,14 @@ export class HistoryManager<T> {
   canRedo(): boolean {
     return this.currentIndex < this.history.length - 1;
   }
+
+  // Get all history items
+  getHistory(): T[] {
+    return [...this.history];
+  }
+
+  // Get current index
+  getCurrentIndex(): number {
+    return this.currentIndex;
+  }
 }

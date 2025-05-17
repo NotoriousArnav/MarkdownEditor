@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
 import { EditorToolbar } from "@/components/EditorToolbar";
 import { WordCount } from "@/components/WordCount";
@@ -12,9 +12,16 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { Save, Undo, Redo, Palette } from "lucide-react";
+import { 
+  ResizablePanelGroup, 
+  ResizablePanel, 
+  ResizableHandle 
+} from "@/components/ui/resizable";
+import { Save, Undo, Redo, Palette, History } from "lucide-react";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { MarkdownTheme } from "@/utils/themeOptions";
+import { HistoryViewer } from "@/components/HistoryViewer";
+import { useHotkeys } from "@/hooks/useHotkeys";
 
 export const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState<string>(() => {
@@ -26,9 +33,11 @@ export const MarkdownEditor = () => {
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
+  const [historyViewerOpen, setHistoryViewerOpen] = useState(false);
   const [markdownTheme, setMarkdownTheme] = useState<MarkdownTheme>(() => {
     return (localStorage.getItem("markdown-theme") as MarkdownTheme) || "github";
   });
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const { toast } = useToast();
 
@@ -54,6 +63,51 @@ export const MarkdownEditor = () => {
     history.push(newValue);
   };
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Auto-complete functionality
+    if (e.key === '`' && e.ctrlKey) {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const value = textarea.value;
+      
+      const newValue = value.substring(0, start) + '```\n\n```' + value.substring(end);
+      setMarkdown(newValue);
+      history.push(newValue);
+      
+      // Set cursor position
+      setTimeout(() => {
+        textarea.selectionStart = start + 4;
+        textarea.selectionEnd = start + 4;
+        textarea.focus();
+      }, 0);
+    } else if (e.key === '*' && e.shiftKey) {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const value = textarea.value;
+      const selectedText = value.substring(start, end);
+      
+      const newValue = value.substring(0, start) + '**' + selectedText + '**' + value.substring(end);
+      setMarkdown(newValue);
+      history.push(newValue);
+      
+      // Set cursor position
+      setTimeout(() => {
+        if (selectedText.length === 0) {
+          textarea.selectionStart = start + 2;
+          textarea.selectionEnd = start + 2;
+        } else {
+          textarea.selectionStart = start + 2 + selectedText.length + 2;
+          textarea.selectionEnd = start + 2 + selectedText.length + 2;
+        }
+        textarea.focus();
+      }, 0);
+    }
+  }, [history]);
+
   const handleInsertText = (text: string) => {
     const newValue = markdown + text;
     setMarkdown(newValue);
@@ -61,7 +115,7 @@ export const MarkdownEditor = () => {
   };
 
   const handleToolbarAction = (action: string) => {
-    const textarea = document.querySelector("textarea");
+    const textarea = textareaRef.current;
     if (!textarea) return;
 
     const start = textarea.selectionStart;
@@ -130,6 +184,9 @@ export const MarkdownEditor = () => {
       case "theme":
         setThemeDialogOpen(true);
         return;
+      case "history":
+        setHistoryViewerOpen(true);
+        return;
       case "save":
         // Save handled by dropdown menu now
         return;
@@ -174,6 +231,27 @@ export const MarkdownEditor = () => {
     });
   };
 
+  // Register keyboard shortcuts
+  useHotkeys('ctrl+s', (e) => {
+    e.preventDefault();
+    handleSaveToLocalStorage();
+  });
+  
+  useHotkeys('ctrl+z', (e) => {
+    e.preventDefault();
+    handleToolbarAction("undo");
+  });
+  
+  useHotkeys('ctrl+y', (e) => {
+    e.preventDefault();
+    handleToolbarAction("redo");
+  });
+  
+  useHotkeys('ctrl+h', (e) => {
+    e.preventDefault();
+    setHistoryViewerOpen(true);
+  });
+
   return (
     <div className="flex flex-col h-full max-h-[calc(100vh-12rem)]">
       <div className="flex justify-between items-center mb-3">
@@ -183,7 +261,7 @@ export const MarkdownEditor = () => {
             size="sm"
             onClick={() => handleToolbarAction("undo")}
             disabled={!canUndo}
-            title="Undo"
+            title="Undo (Ctrl+Z)"
           >
             <Undo size={16} />
           </Button>
@@ -192,9 +270,18 @@ export const MarkdownEditor = () => {
             size="sm"
             onClick={() => handleToolbarAction("redo")}
             disabled={!canRedo}
-            title="Redo"
+            title="Redo (Ctrl+Y)"
           >
             <Redo size={16} />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleToolbarAction("history")}
+            title="History (Ctrl+H)"
+          >
+            <History size={16} className="mr-1" />
+            History
           </Button>
         </div>
         
@@ -230,26 +317,38 @@ export const MarkdownEditor = () => {
       
       <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
       
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row flex-1 overflow-hidden">
-        {!isPreviewMode && (
-          <div className="flex-1 flex flex-col min-w-0">
-            <textarea
-              value={markdown}
-              onChange={handleChange}
-              className="flex-1 p-4 resize-none focus:outline-none font-mono text-sm leading-relaxed bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-              placeholder="Start writing your markdown here..."
-            />
-            <div className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
-              <WordCount text={markdown} />
-            </div>
-          </div>
-        )}
-        
-        {(!isPreviewMode && window.innerWidth >= 768) || isPreviewMode ? (
-          <div className={`flex-1 ${!isPreviewMode && window.innerWidth >= 768 ? "border-l border-gray-200 dark:border-gray-700" : ""} overflow-auto`}>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
+        {!isPreviewMode ? (
+          <ResizablePanelGroup direction="horizontal" className="flex-1">
+            <ResizablePanel defaultSize={50} minSize={30}>
+              <div className="flex-1 flex flex-col h-full min-w-0">
+                <textarea
+                  ref={textareaRef}
+                  value={markdown}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  className="flex-1 p-4 resize-none focus:outline-none font-mono text-sm leading-relaxed bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 h-full"
+                  placeholder="Start writing your markdown here..."
+                />
+                <div className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
+                  <WordCount text={markdown} />
+                </div>
+              </div>
+            </ResizablePanel>
+            
+            <ResizableHandle withHandle />
+            
+            <ResizablePanel defaultSize={50} minSize={30}>
+              <div className="h-full overflow-auto">
+                <MarkdownPreview markdown={markdown} theme={markdownTheme} />
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        ) : (
+          <div className="flex-1 overflow-auto">
             <MarkdownPreview markdown={markdown} theme={markdownTheme} />
           </div>
-        ) : null}
+        )}
       </div>
       
       <div className="mt-3 flex justify-end">
@@ -267,6 +366,17 @@ export const MarkdownEditor = () => {
         onClose={() => setThemeDialogOpen(false)}
         currentTheme={markdownTheme}
         onThemeChange={setMarkdownTheme}
+      />
+      
+      <HistoryViewer
+        isOpen={historyViewerOpen}
+        onClose={() => setHistoryViewerOpen(false)}
+        history={history}
+        currentContent={markdown}
+        setContent={(content) => {
+          setMarkdown(content);
+          history.push(content);
+        }}
       />
     </div>
   );
