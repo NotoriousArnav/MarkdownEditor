@@ -198,6 +198,9 @@ export const MarkdownEditor = () => {
       case "pdfexport":
         handleExportPDF();
         return;
+      case "share":
+        alert("Not Implemented yet.");
+        return;
       default:
         break;
     }
