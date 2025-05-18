@@ -24,6 +24,13 @@
 
   </head>
 
+  <script>
+    if (typeof navigator.serviceWorker !== 'undefined') {
+      // Register the service worker
+      navigator.serviceWorker.register('sw.js')
+    }
+  </script>
+
   <body id="root">
     <!-- <div id="root"></div> -->
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
