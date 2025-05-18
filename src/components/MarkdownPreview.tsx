@@ -2,8 +2,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
 import rehypeSanitize from 'rehype-sanitize';
 import rehypeRaw from 'rehype-raw';
+import rehypeKatex from 'rehype-katex';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Copy } from 'lucide-react';
@@ -36,8 +38,8 @@ export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
   return (
     <div id="mdwindow" className={`p-4 prose prose-sm md:prose-base max-w-none overflow-auto h-full markdown-preview dark:prose-invert markdown-theme-${theme}`}>
       <ReactMarkdown 
-        remarkPlugins={[remarkGfm]} 
-        rehypePlugins={[rehypeSanitize, rehypeRaw]}
+        remarkPlugins={[remarkGfm, remarkMath]} 
+        rehypePlugins={[rehypeSanitize, rehypeRaw, rehypeKatex]}
         components={{
           code({className, children, ...props}) {
             const match = /language-(\w+)/.exec(className || '');
