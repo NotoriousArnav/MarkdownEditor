@@ -7,9 +7,16 @@ Markdown Editor is a simple and lightweight Markdown editor built with React. It
 - Minimal and Lightweight
 - No Server-side dependencies
 - Autosave
-- **TODO:** Add File Sharing Support
-- **TODO:** Add Toggle Preview Mode using URL bar
+- Toggle Preview Mode using URL bar, just add `?preview=true` to the URL
+- Fetch Remote file with `?fetchFrom=theUrl`
 - File Open, Local and Remote
+
+## TODOS:
+- PWA Support
+- File Sharing Support to allow sharing Markdown content as mini websites
+- Multi File Support to allow multiple tabs and allow Notebook like functionality like Obsidian
+
+[![A Demo](https://i.ytimg.com/vi/ufgCsc758yw/hqdefault.jpg "Markdown Editor")](https://www.youtube.com/watch?v=ufgCsc758yw)
 
 ## Running
 ### Clone Repo
