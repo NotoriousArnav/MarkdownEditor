@@ -1,0 +1,13 @@
+{
+  "name": "Yame Markdown Editor",
+  "short_name": "Yame",
+  "start_url": "./",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "yame.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
