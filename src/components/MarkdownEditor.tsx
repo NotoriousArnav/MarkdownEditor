@@ -189,11 +189,11 @@ export const MarkdownEditor = () => {
 
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  window.handleExportPDF = handleExportPDF; // Expose function to global scope for debugging.
+  // window.handleExportPDF = handleExportPDF; // Expose function to global scope for debugging.
 
   //@ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  window.handleExportHTML = handleExportHTML;
+  // window.handleExportHTML = handleExportHTML;
 
   const handleToolbarAction = (action: string) => {
     const textarea = textareaRef.current;
@@ -356,7 +356,7 @@ export const MarkdownEditor = () => {
 
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
+  // window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
   
   const handleSaveToLocalStorage = (dnd?: boolean) => {
     localStorage.setItem("markdown-content", markdown);
@@ -370,7 +370,7 @@ export const MarkdownEditor = () => {
 
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  window.handleSaveToLocalStorage = handleSaveToLocalStorage;
+  // window.handleSaveToLocalStorage = handleSaveToLocalStorage;
 
   var intervalId = setInterval(() => {
     handleSaveToLocalStorage(true)
@@ -500,6 +500,16 @@ export const MarkdownEditor = () => {
     e.preventDefault();
     setIsPreviewMode(!isPreviewMode);
   });
+  
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  window.yame = {
+    handleToolbarAction,
+    handleSaveToLocalStorage,
+    handleExportPDF,
+    handleSaveToFile,
+    handleFetchFromUrl,
+  }
 
   return (
     <div className="flex flex-col h-full overflow-hidden">

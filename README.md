@@ -18,7 +18,6 @@ Made in 1 day for fun, lol
 - **MAIN FOCUS** Extensions Support to allow devs to make custom extensions and add them to the editor
 - File Sharing Support to allow sharing Markdown content as mini websites **Trying but failing to do, because I hate centralization**
 - Multi File Support to allow multiple tabs and allow Notebook like functionality like Obsidian **Sometimes I think this is unnecessary**
-- Clean the global namespace by changing `window.blahblah` to `window.yame.blahblah` **Very important**
 - Allow custom themes **Yeah man, this is a TODO**
 - Allow changing Code Block Themes
 - Add more Markdown flavors
