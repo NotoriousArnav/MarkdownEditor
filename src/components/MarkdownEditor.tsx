@@ -143,7 +143,7 @@ export const MarkdownEditor = () => {
     history.push(newValue);
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = (filename?: string, dnd?: boolean) => {
     const el = document.getElementById("mdwindow");
     if (!el) return;
 
@@ -151,7 +151,7 @@ export const MarkdownEditor = () => {
 
     const opt = {
       margin: 0.5,
-      filename: 'markdown.pdf',
+      filename: filename || 'markdown.pdf',
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -168,11 +168,16 @@ export const MarkdownEditor = () => {
 
       html2pdf().set(opt).from(doc.body).save().then(() => {
         iframe.remove();
+        if (dnd) return dnd;
+        toast({
+          title: 'PDF Exported',
+          description: 'Your markdown has been exported as a PDF.',
+        })
       });
     }
   };
 
-  const handleExportHTML = () => {
+  const handleExportHTML = (filename?: string, dnd?: boolean) => {
     const el = document.getElementById("mdwindow");
     if (!el) return;
     const htmlString = inlineAllStyles(el);
@@ -180,11 +185,16 @@ export const MarkdownEditor = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'document.html';
+    a.download = filename || 'document.html';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    if (dnd) return dnd;
+    toast({
+      title: 'HTML Exported',
+      description: 'Your markdown has been exported as an HTML file.',
+    })
   }
 
   // @ts-ignore
@@ -508,7 +518,8 @@ export const MarkdownEditor = () => {
     handleSaveToLocalStorage,
     handleExportPDF,
     handleSaveToFile,
-    handleFetchFromUrl,
+    handleExportHTML,
+    fetchFromUrl
   }
 
   return (

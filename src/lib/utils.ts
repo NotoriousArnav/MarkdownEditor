@@ -33,7 +33,7 @@ export async function fetchFromUrl(url: string) {
 
 // @ts-ignore
 // eslint-disable-next-line
-window.fetchFromUrl = fetchFromUrl
+//window.fetchFromUrl = fetchFromUrl
 
 // @ts-ignore
 // eslint-disable-next-line
