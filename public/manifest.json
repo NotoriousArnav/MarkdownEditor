@@ -13,5 +13,21 @@
   "theme_color": "#f3f3f3",
   "background_color": "#ffffff",
   "id": "yame-md-editor",
-  "description": "A Simple robust Markdown Editor"
+  "description": "A Simple robust Markdown Editor",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
+  "lang": "en",
+  "orientations": "any",
+  "screenshots": [
+    {
+      "src": "screenshot.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "platform": "wide"
+    }
 }
+
