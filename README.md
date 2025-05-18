@@ -3,7 +3,7 @@ YAME is a simple and lightweight Markdown editor built with React. It allows use
 
 ## Features
 - Supports Github, Notion, Dev.to and Medium markdown themes
-- Allows exporting to PDF
+- Allows exporting to PDF and HTML
 - Minimal and Lightweight
 - No Server-side dependencies
 - Autosave
@@ -12,6 +12,7 @@ YAME is a simple and lightweight Markdown editor built with React. It allows use
 - File Open, Local and Remote
 
 ## TODOS:
+- ~Meth~ Math Support
 - PWA Support
 - File Sharing Support to allow sharing Markdown content as mini websites
 - Multi File Support to allow multiple tabs and allow Notebook like functionality like Obsidian

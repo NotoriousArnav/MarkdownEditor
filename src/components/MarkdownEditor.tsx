@@ -172,9 +172,28 @@ export const MarkdownEditor = () => {
     }
   };
 
+  const handleExportHTML = () => {
+    const el = document.getElementById("mdwindow");
+    if (!el) return;
+    const htmlString = inlineAllStyles(el);
+    const blob = new Blob([htmlString], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'document.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   window.handleExportPDF = handleExportPDF; // Expose function to global scope for debugging.
+
+  //@ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  window.handleExportHTML = handleExportHTML;
 
   const handleToolbarAction = (action: string) => {
     const textarea = textareaRef.current;
@@ -200,6 +219,9 @@ export const MarkdownEditor = () => {
         return;
       case "share":
         alert("Not Implemented yet.");
+        return;
+      case "htmlexport":
+        handleExportHTML();
         return;
       default:
         break;

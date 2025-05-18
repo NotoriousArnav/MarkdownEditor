@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { 
   Bold, Italic, Heading1, Heading2, Heading3, Link, Image, Code, Quote, List, ListOrdered, 
   Trash2, Save, Eye, Edit, Undo, Redo, History, Download, Palette, Keyboard, FileText, Github,
-  FolderOpen, CloudDownload, Share
+  FolderOpen, CloudDownload, Share, CodeXml
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useToast } from "@/components/ui/use-toast";
@@ -49,6 +49,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <Palette size={24} />, name: "theme", tooltip: "Change Markdown Theme"},
     { icon: <Eye size={24} />, name: "preview", tooltip: "Preview" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
+    { icon: <CodeXml size={24} />, name: "htmlexport", tooltip: "Export HTML" },
     { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },
   ];
 
@@ -56,6 +57,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <Edit size={24} />, name: "edit", tooltip: "Edit" },
     { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-800 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
+    { icon: <CodeXml size={24} />, name: "htmlexport", tooltip: "Export HTML" },
     { icon: <Palette size={24} />, name: "theme", tooltip: "Change Theme"},
     { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },
   ];
