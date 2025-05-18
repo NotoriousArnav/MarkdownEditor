@@ -14,7 +14,7 @@ Made in 1 day for fun, lol
 - File Open, Local and Remote
 
 ## TODOS:
-- **MAIN FOCUS RIGHT NOW** PWA Support especially for Android and Chrome OS Devices like Chromebooks and Android Tablets
+- **I TRIED SO HARD AND GOT SO FAR, IN THE END, DOES IT EVEN MATTER?** PWA Support especially for Android and Chrome OS Devices like Chromebooks and Android Tablets
 - **MAIN FOCUS** Extensions Support to allow devs to make custom extensions and add them to the editor
 - File Sharing Support to allow sharing Markdown content as mini websites **Trying but failing to do, because I hate centralization**
 - Multi File Support to allow multiple tabs and allow Notebook like functionality like Obsidian **Sometimes I think this is unnecessary**
