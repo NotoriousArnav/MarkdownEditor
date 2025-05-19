@@ -1,11 +1,10 @@
-import { useEffect, useState, useCallback, useRef } from "react";
-import { MarkdownPreview } from "@/components/MarkdownPreview";
+import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { EditorToolbar } from "@/components/EditorToolbar";
 import { WordCount } from "@/components/WordCount";
-import { Button } from "@/components/ui/button";
+//import { Button } from "@/components/ui/button";
+import { Loading } from "@/components/ui/loading";
 import { useToast } from "@/components/ui/use-toast";
 import { HistoryManager } from "@/utils/historyManager";
-import html2pdf from "html2pdf.js";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -18,14 +17,16 @@ import {
   ResizableHandle 
 } from "@/components/ui/resizable";
 import { Save, Undo, Redo, Palette, History } from "lucide-react";
-import { ThemeSelector } from "@/components/ThemeSelector";
 import { MarkdownTheme } from "@/utils/themeOptions";
-import { HistoryViewer } from "@/components/HistoryViewer";
-import { FetchFromHTTP } from "@/components/FetchFromHTTP";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
-import { text } from "stream/consumers";
 import { inlineAllStyles, fetchFromUrl } from "@/lib/utils";
+
+// Dynamically import components that aren't needed on initial load
+const MarkdownPreview = lazy(() => import("@/components/MarkdownPreview").then(module => ({ default: module.MarkdownPreview })));
+const ThemeSelector = lazy(() => import("@/components/ThemeSelector").then(module => ({ default: module.ThemeSelector })));
+const HistoryViewer = lazy(() => import("@/components/HistoryViewer").then(module => ({ default: module.HistoryViewer })));
+const FetchFromHTTP = lazy(() => import("@/components/FetchFromHTTP").then(module => ({ default: module.FetchFromHTTP })));
 
 export const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState<string>(() => {
@@ -143,11 +144,15 @@ export const MarkdownEditor = () => {
     history.push(newValue);
   };
 
-  const handleExportPDF = (filename?: string, dnd?: boolean) => {
+  const handleExportPDF = async (filename?: string, dnd?: boolean) => {
     const el = document.getElementById("mdwindow");
     if (!el) return;
 
     const htmlString = inlineAllStyles(el);
+
+    // Dynamically import html2pdf.js only when needed
+    const html2pdfModule = await import('html2pdf.js');
+    const html2pdf = html2pdfModule.default;
 
     const opt = {
       margin: 0.5,
@@ -523,12 +528,13 @@ export const MarkdownEditor = () => {
   }
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <Suspense fallback={<Loading />}>
+      <div className="flex flex-col h-full overflow-hidden">
       
       <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
       
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
-        {!isPreviewMode ? (
+      {!isPreviewMode ? (
           <ResizablePanelGroup direction="horizontal" className="flex-1">
             <ResizablePanel defaultSize={50} minSize={30}>
               <div className="flex-1 flex flex-col h-full min-w-0">
@@ -561,30 +567,31 @@ export const MarkdownEditor = () => {
         )}
       </div>
 
-      <ThemeSelector 
-        isOpen={themeDialogOpen}
-        onClose={() => setThemeDialogOpen(false)}
-        currentTheme={markdownTheme}
-        onThemeChange={setMarkdownTheme}
-      />
-      
-      <HistoryViewer
-        isOpen={historyViewerOpen}
-        onClose={() => setHistoryViewerOpen(false)}
-        history={history}
-        currentContent={markdown}
-        setContent={(content) => {
-          setMarkdown(content);
-          history.push(content);
-        }}
-      />
+        <ThemeSelector 
+            isOpen={themeDialogOpen}
+            currentTheme={markdownTheme} 
+            onThemeChange={setMarkdownTheme}
+            onClose={() => setThemeDialogOpen(false)}
+        />
 
-      <FetchFromHTTP
-        isOpen={isFetchDialogOpen}
-        onClose={handleFetchFromUrl}
-      />
+        <HistoryViewer
+          isOpen={historyViewerOpen}
+          onClose={() => setHistoryViewerOpen(false)}
+          history={history}
+          currentContent={markdown}
+          setContent={(content) => {
+            setMarkdown(content);
+            history.push(content);
+          }}
+        />
+        
+        <FetchFromHTTP
+            isOpen={isFetchDialogOpen}
+            onClose={handleFetchFromUrl}
+        />
 
       <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
     </div>
+    </Suspense>
   );
 };
