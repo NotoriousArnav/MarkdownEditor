@@ -570,27 +570,24 @@ export const MarkdownEditor = () => {
         <ThemeSelector 
             isOpen={themeDialogOpen}
             currentTheme={markdownTheme} 
-            onThemeSelect={(theme) => {
-              setMarkdownTheme(theme);
-              setThemeDialogOpen(false);
-            }}
+            onThemeChange={setMarkdownTheme}
             onClose={() => setThemeDialogOpen(false)}
         />
-        
+
         <HistoryViewer
-            isOpen={historyViewerOpen}
-            history={history}
-            onSelect={(content) => {
-              setMarkdown(content);
-              setHistoryViewerOpen(false);
-            }}
-            onClose={() => setHistoryViewerOpen(false)}
+          isOpen={historyViewerOpen}
+          onClose={() => setHistoryViewerOpen(false)}
+          history={history}
+          currentContent={markdown}
+          setContent={(content) => {
+            setMarkdown(content);
+            history.push(content);
+          }}
         />
         
         <FetchFromHTTP
             isOpen={isFetchDialogOpen}
-            onFetch={handleFetchFromUrl}
-            onClose={() => setShowFetchDialog(false)}
+            onClose={handleFetchFromUrl}
         />
 
       <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
