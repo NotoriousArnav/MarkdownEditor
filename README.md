@@ -1,6 +1,8 @@
 # YAME: Yet another Markdown Editor
 YAME is a simple and lightweight Markdown editor built with React. It allows users to write and preview Markdown content in real-time.
-Made in 1 day for fun, lol
+
+## Getting Started
+To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownEditor/) in your browser. If you are using **Chromium based Browsers** you can install it straight from the browser, regardless of the OS/Platform you are on. 
 
 ## Features
 - Supports Github, Notion, Dev.to and Medium markdown flavors
@@ -12,9 +14,9 @@ Made in 1 day for fun, lol
 - Toggle Preview Mode using URL bar, just add `?preview=true` to the URL
 - Fetch Remote file with `?fetchFrom=theUrl`
 - File Open, Local and Remote
+- PWA Support, so you can just Install the App from the Browser it self!
 
 ## TODOS:
-- **I TRIED SO HARD AND GOT SO FAR, IN THE END, DOES IT EVEN MATTER?** PWA Support especially for Android and Chrome OS Devices like Chromebooks and Android Tablets
 - **MAIN FOCUS** Extensions Support to allow devs to make custom extensions and add them to the editor
 - File Sharing Support to allow sharing Markdown content as mini websites **Trying but failing to do, because I hate centralization**
 - Multi File Support to allow multiple tabs and allow Notebook like functionality like Obsidian **Sometimes I think this is unnecessary**
