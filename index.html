@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Markdown Editor</title>
+    <title>YAME</title>
 
     <meta name="description" content="A simple markdown editor" />
     <meta name="author" content="Your Name" />
@@ -19,8 +19,17 @@
     <meta name="twitter:description" content="A simple markdown editor" />
     <meta name="twitter:creator" content="@arnv2004" />
 
+    <link rel="icon" type="image/svg+xml" href="yame.png">
+    <link rel="manifest" href="manifest.json">
 
   </head>
+
+  <script>
+    if (typeof navigator.serviceWorker !== 'undefined') {
+      // Register the service worker
+      navigator.serviceWorker.register('sw.js')
+    }
+  </script>
 
   <body id="root">
     <!-- <div id="root"></div> -->

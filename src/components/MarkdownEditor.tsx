@@ -46,6 +46,30 @@ export const MarkdownEditor = () => {
   
   const { toast } = useToast();
 
+  //Check if url has ?preview=true
+  const url = new URL(window.location.href);
+  useEffect(() => {
+    if (url.searchParams.get("preview") === "true") {
+      setIsPreviewMode(true);
+    }
+  }, []);
+
+  //Check if User added fetchFrom=some.url
+  useEffect(() => {
+    const fetchFrom = url.searchParams.get("fetchFrom");
+    if (fetchFrom) {
+      fetchFromUrl(fetchFrom)
+        .then((data) => {
+          setMarkdown(data);
+        })
+        .catch((error) => {
+          alert(`Could not fetch document from ${fetchFrom}`);
+          console.error("Error fetching data:", error);
+        })
+    }
+  }, []);
+  
+
   // Update history control states
   useEffect(() => {
     setCanUndo(history.canUndo());
@@ -119,7 +143,7 @@ export const MarkdownEditor = () => {
     history.push(newValue);
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = (filename?: string, dnd?: boolean) => {
     const el = document.getElementById("mdwindow");
     if (!el) return;
 
@@ -127,7 +151,7 @@ export const MarkdownEditor = () => {
 
     const opt = {
       margin: 0.5,
-      filename: 'markdown.pdf',
+      filename: filename || 'markdown.pdf',
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -144,13 +168,42 @@ export const MarkdownEditor = () => {
 
       html2pdf().set(opt).from(doc.body).save().then(() => {
         iframe.remove();
+        if (dnd) return dnd;
+        toast({
+          title: 'PDF Exported',
+          description: 'Your markdown has been exported as a PDF.',
+        })
       });
     }
   };
 
+  const handleExportHTML = (filename?: string, dnd?: boolean) => {
+    const el = document.getElementById("mdwindow");
+    if (!el) return;
+    const htmlString = inlineAllStyles(el);
+    const blob = new Blob([htmlString], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || 'document.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    if (dnd) return dnd;
+    toast({
+      title: 'HTML Exported',
+      description: 'Your markdown has been exported as an HTML file.',
+    })
+  }
+
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  window.handleExportPDF = handleExportPDF; // Expose function to global scope for debugging.
+  // window.handleExportPDF = handleExportPDF; // Expose function to global scope for debugging.
+
+  //@ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // window.handleExportHTML = handleExportHTML;
 
   const handleToolbarAction = (action: string) => {
     const textarea = textareaRef.current;
@@ -173,6 +226,12 @@ export const MarkdownEditor = () => {
         return;
       case "pdfexport":
         handleExportPDF();
+        return;
+      case "share":
+        alert("Not Implemented yet.");
+        return;
+      case "htmlexport":
+        handleExportHTML();
         return;
       default:
         break;
@@ -307,7 +366,7 @@ export const MarkdownEditor = () => {
 
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
+  // window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
   
   const handleSaveToLocalStorage = (dnd?: boolean) => {
     localStorage.setItem("markdown-content", markdown);
@@ -321,7 +380,7 @@ export const MarkdownEditor = () => {
 
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  window.handleSaveToLocalStorage = handleSaveToLocalStorage;
+  // window.handleSaveToLocalStorage = handleSaveToLocalStorage;
 
   var intervalId = setInterval(() => {
     handleSaveToLocalStorage(true)
@@ -451,6 +510,17 @@ export const MarkdownEditor = () => {
     e.preventDefault();
     setIsPreviewMode(!isPreviewMode);
   });
+  
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  window.yame = {
+    handleToolbarAction,
+    handleSaveToLocalStorage,
+    handleExportPDF,
+    handleSaveToFile,
+    handleExportHTML,
+    fetchFromUrl
+  }
 
   return (
     <div className="flex flex-col h-full overflow-hidden">

@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://notoriousarnav.github.io/MarkdownEditor",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,7 +12,8 @@
     "preview": "vite preview",
     "predeploy": "vite build",
     "deploy": "gh-pages -d dist",
-    "postdeploy": "echo 'Deployment complete'; echo 1"
+    "postdeploy": "echo 'Deployment complete'; echo 1",
+    "report": "vite build -- --report"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -50,8 +52,10 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
+    "form-data": "^4.0.2",
     "html2pdf.js": "^0.10.3",
     "input-otp": "^1.2.4",
+    "katex": "^0.16.22",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
@@ -63,9 +67,12 @@
     "react-router-dom": "^6.26.2",
     "react-syntax-highlighter": "^15.6.1",
     "recharts": "^2.12.7",
+    "rehype-katex": "^7.0.1",
     "rehype-raw": "^7.0.0",
     "rehype-sanitize": "^6.0.0",
     "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
+    "rollup-plugin-visualizer": "^5.14.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
