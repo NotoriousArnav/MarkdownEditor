@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { EditorToolbar } from "@/components/EditorToolbar";
 import { WordCount } from "@/components/WordCount";
-//import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
 import { useToast } from "@/components/ui/use-toast";
 import { HistoryManager } from "@/utils/historyManager";
@@ -20,7 +19,7 @@ import { Save, Undo, Redo, Palette, History } from "lucide-react";
 import { MarkdownTheme } from "@/utils/themeOptions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
-import { inlineAllStyles, fetchFromUrl } from "@/lib/utils";
+import { inlineAllStyles, fetchFromUrl, shareFile } from "@/lib/utils";
 
 // Dynamically import components that aren't needed on initial load
 const MarkdownPreview = lazy(() => import("@/components/MarkdownPreview").then(module => ({ default: module.MarkdownPreview })));
@@ -437,50 +436,27 @@ export const MarkdownEditor = () => {
     });
   };
 
-  const handleShare = async () => {
+  // Share Function
+  const handleShare = async (copyPreview?: boolean, dnd?: boolean) => {
     const randomString = Math.random().toString(36).substring(2, 15);
-    const file = new File([markdown], `yame_${randomString}.md`, {
-      type: 'text/markdown',
-    });
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('time', '24'); // 24 hours
-
-    try {
-      const response = await fetch('https://share.nnisarg.in/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        }
-      });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error(errorData);
-        throw new Error(errorData);
-      }
-
-      const shareURL = (await response.text()).trim();
-
+    const data = markdown;
+    const name = `yame-${randomString}.md`;
+    const time = 24;
+    const notify_func = (dnd) ? ((dt) => dnd) : toast;
+    const link = await shareFile(data, name, time, toast);
+    const yameLink = `${window.location.href}/?fetchFrom=${link}`;
+    const copyLink = copyPreview ? yameLink : link;
+    if (link) {
+      navigator
+        .clipboard
+        .writeText(copyLink);
       toast({
-        title: "File Shared",
-        description: `Your file can be accessed at: ${shareURL} for 24 hours! We've also copied the link to clipboard :D`,
-      });
-
-      await navigator.clipboard.writeText(shareURL);
-
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Share Failed",
-        description: `Could not share the file: ${error}`,
-        variant: "destructive",
+        title: "Link Copied",
+        description: "The share link has been copied to your clipboard.",
       });
     }
+    return copyLink;
   };
-
 
   // Register keyboard shortcuts
   // TODO: Add more shortcuts
@@ -579,7 +555,9 @@ export const MarkdownEditor = () => {
     handleExportPDF,
     handleSaveToFile,
     handleExportHTML,
-    fetchFromUrl
+    handleShare,
+    fetchFromUrl,
+    shareFile
   }
 
   return (

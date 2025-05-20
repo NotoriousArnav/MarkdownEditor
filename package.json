@@ -1,5 +1,6 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "yame",
+  "description": "Yet Another Markdown Editor (but better)",
   "private": true,
   "version": "0.0.0",
   "type": "module",

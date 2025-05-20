@@ -1,12 +1,15 @@
 # YAME: Yet another Markdown Editor
 YAME is a simple and lightweight Markdown editor built with React. It allows users to write and preview Markdown content in real-time.
 
+> **Baptism of Code Ongoing, to remove the sins of the developer, future commits may contain breaking Changes**
+
 ## Getting Started
 To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownEditor/) in your browser. If you are using **Chromium based Browsers** you can install it straight from the browser, regardless of the OS/Platform you are on. 
 
 ## Features
 - Supports Github, Notion, Dev.to and Medium markdown flavors
 - ~Meth~ Math Support
+- File Sharing Support ( Thanks @hect1k )
 - Allows exporting to PDF and HTML
 - Minimal and Lightweight (debatable, but atleast its lighter than ur mom)
 - No Server-side dependencies (Really)
@@ -18,7 +21,6 @@ To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownE
 
 ## TODOS:
 - **MAIN FOCUS** Extensions Support to allow devs to make custom extensions and add them to the editor
-- File Sharing Support to allow sharing Markdown content as mini websites **Trying but failing to do, because I hate centralization**
 - Multi File Support to allow multiple tabs and allow Notebook like functionality like Obsidian **Sometimes I think this is unnecessary**
 - Allow custom themes **Yeah man, this is a TODO**
 - Allow changing Code Block Themes

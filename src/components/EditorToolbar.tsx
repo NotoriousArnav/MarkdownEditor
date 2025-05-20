@@ -54,6 +54,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
   ];
 
   const previewModeToolbar = [
+    { icon: <Share size={24} />, name: "share", tooltip: "Share", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Edit size={24} />, name: "edit", tooltip: "Edit" },
     { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-800 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
