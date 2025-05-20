@@ -74,8 +74,6 @@ export const MarkdownEditor = () => {
 
 
   // Check if first time user
-  // If the User has not used the app before, then the localStorage's key firstTime will be empty
-  // If the User has used the app before, then the localStorage's key firstTime will be "false"
   useEffect(() => {
     const firstTime = localStorage.getItem("firstTime");
     if (firstTime === null) {
