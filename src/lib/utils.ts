@@ -38,39 +38,38 @@ export async function fetchFromUrl(url: string) {
 }
 
 export async function shareFile(
-    data: string,
-    name: string,
-    time: int = 24,
-    toast = (obj) => {alert(`${obj.title}\n${obj.description}`)},
-    instance: string = SWFTInstance,
-  ) {
-  const formData = new FormData();
-  const file = new File(
-    [data],
-    name,
-    { 
-      type: 'text/markdown'
-    }
-  );
-  formData.append('file', file);
-  formData.append('time', '24'); // 24 hours
-  const response = await axios.post(
-    instance,
-    formData,
-    {
+  data: string,
+  name: string,
+  expiry_time: string = '24', // in hours and as a string
+  toast: (obj: { title: string, description: string, variant?: 'default' | 'destructive' }) => void = ({ title, description, variant }) => {
+    alert(`${title}\n${description}`);
+  },
+  instance: string = SWFTInstance,
+): Promise<any | undefined> {
+  try {
+    const formData = new FormData();
+    const file = new File([data], name, { type: 'text/markdown' });
+    formData.append('file', file);
+    formData.append('time', expiry_time);
+
+    const response = await axios.post(instance, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Accept': 'application/json',
-      }    
-    }).catch((error) => {
-      toast({
-        title: `Error: Could not share file`,
-        description: `Error: ${error}`,
-        variant: "destructive",
-      });
-      console.log("Error sharing file:", error);
+      },
     });
+
     return response.data;
+
+  } catch (error: any) {
+    toast({
+      title: `Could not share file`,
+      description: `Error: ${error.response.data}`,
+      variant: 'destructive',
+    });
+    console.error("Error sharing file:", error.response.data);
+    return undefined;
+  }
 }
 
 // @ts-ignore

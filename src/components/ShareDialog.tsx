@@ -21,7 +21,7 @@ interface ShareDialogProps {
   initialFilename?: string;
 }
 
-export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "document.md" }: ShareDialogProps) {
+export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "yame-document.md" }: ShareDialogProps) {
   const [filename, setFilename] = useState(initialFilename);
   const [duration, setDuration] = useState(24);
   const [rawLink, setRawLink] = useState("");
@@ -55,11 +55,11 @@ export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "docum
     try {
       const link = await onShare(filename, duration);
       setRawLink(link);
-      
+
       // Create app link from raw link
       const appBaseLink = `${window.location.href.split('?')[0]}?fetchFrom=${link}`;
       setAppLink(previewMode ? `${appBaseLink}&preview=true` : appBaseLink);
-      
+
       setIsShared(true);
     } catch (error) {
       console.error("Error sharing:", error);
@@ -83,7 +83,7 @@ export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "docum
             Configure sharing options and generate a shareable link.
           </DialogDescription>
         </DialogHeader>
-        
+
         {!isShared ? (
           // Sharing configuration form
           <div className="grid gap-4 py-4">
@@ -98,8 +98,8 @@ export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "docum
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="duration" className="text-right"><Clock className="h-4 w-4 inline mr-1" /> Duration</Label>
-              <Select 
-                value={duration.toString()} 
+              <Select
+                value={duration.toString()}
                 onValueChange={(value) => setDuration(parseInt(value))}
               >
                 <SelectTrigger className="col-span-3">
@@ -117,14 +117,14 @@ export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "docum
               </Select>
             </div>
             <div className="flex justify-end space-x-2 pt-4">
-              <Button 
-                onClick={() => onClose("cancel")} 
+              <Button
+                onClick={() => onClose("cancel")}
                 variant="outline"
               >
                 Cancel
               </Button>
-              <Button 
-                onClick={handleShare} 
+              <Button
+                onClick={handleShare}
                 disabled={isSharing}
               >
                 {isSharing ? "Sharing..." : "Share"}
@@ -154,7 +154,7 @@ export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "docum
                 </Button>
               </div>
             </div>
-            
+
             <div className="grid gap-2">
               <Label htmlFor="app-link" className="flex items-center">
                 <Link className="h-4 w-4 mr-1" /> Application Share Link
@@ -175,7 +175,7 @@ export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "docum
                 </Button>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2 pt-2">
               <Label htmlFor="preview-mode" className="flex items-center cursor-pointer">
                 <Eye className="h-4 w-4 mr-1" /> Open in Preview Mode
@@ -186,16 +186,16 @@ export function ShareDialog({ isOpen, onClose, onShare, initialFilename = "docum
                 onCheckedChange={setPreviewMode}
               />
             </div>
-            
+
             <div className="flex justify-end space-x-2 pt-4">
-              <Button 
-                onClick={() => setIsShared(false)} 
+              <Button
+                onClick={() => setIsShared(false)}
                 variant="outline"
               >
                 Back
               </Button>
-              <Button 
-                onClick={() => onClose("done")} 
+              <Button
+                onClick={() => onClose("done")}
                 variant="default"
               >
                 Done
