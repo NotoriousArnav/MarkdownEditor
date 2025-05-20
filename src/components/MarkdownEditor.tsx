@@ -425,7 +425,7 @@ export const MarkdownEditor = () => {
   const handleShareDocument = async (filename: string, duration: number): Promise<string> => {
     try {
       const data = markdown;
-      const link = await shareFile(data, filename, duration, toast);
+      const link = await shareFile(data, filename, duration.toString(), toast);
       return link;
     } catch (error) {
       console.error("Error sharing file:", error);
@@ -440,7 +440,7 @@ export const MarkdownEditor = () => {
   // Handle share dialog close action
   const handleShareDialogClose = (action: string) => {
     setShareDialogOpen(false);
-    
+
     if (action.startsWith("copy")) {
       toast({
         title: "Link Copied",
@@ -614,7 +614,7 @@ export const MarkdownEditor = () => {
         />
 
         {/* Add ShareDialog component */}
-        <ShareDialog 
+        <ShareDialog
           isOpen={shareDialogOpen}
           onClose={handleShareDialogClose}
           onShare={handleShareDocument}
