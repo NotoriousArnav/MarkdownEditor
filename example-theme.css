@@ -1,0 +1,67 @@
+/* Example theme: Brown, Red, and Pink accents */
+:root[data-theme="external"] {
+  --background: #3e2723;
+  --foreground: #fff8f6;
+  --primary: #d84315; /* Red accent */
+  --secondary: #f06292; /* Pink accent */
+  --accent: #8d6e63; /* Brown accent */
+  --border: #bcaaa4;
+  --input-bg: #4e342e;
+  --input-border: #bcaaa4;
+  --button-bg: var(--primary);
+  --button-fg: #fff;
+  --link: var(--secondary);
+}
+
+body[data-theme="external"] {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+[data-theme="external"] .accent {
+  color: var(--accent);
+}
+
+[data-theme="external"] button,
+[data-theme="external"] .btn {
+  background: var(--button-bg);
+  color: var(--button-fg);
+  border: 1px solid var(--border);
+}
+
+[data-theme="external"] input,
+[data-theme="external"] textarea {
+  background: var(--input-bg);
+  color: var(--foreground);
+  border: 1px solid var(--input-border);
+}
+
+[data-theme="external"] a {
+  color: var(--link);
+}
+
+[data-theme="external"] .modal,
+[data-theme="external"] .DialogContent,
+[data-theme="external"] .dialog-content
+[data-theme="external"] div[role="dialog"] {
+  background: #4e342e !important; /* deep brown, not transparent */
+  color: var(--foreground) !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 32px 0 rgba(60, 30, 10, 0.25);
+  border: 1px solid var(--border);
+}
+
+[data-theme="external"] .DialogHeader,
+[data-theme="external"] .dialog-header {
+  color: var(--foreground) !important;
+}
+
+[data-theme="external"] .DialogTitle,
+[data-theme="external"] .dialog-title {
+  color: var(--primary) !important;
+}
+
+[data-theme="external"] .DialogDescription,
+[data-theme="external"] .dialog-description {
+  color: var(--secondary) !important;
+}
