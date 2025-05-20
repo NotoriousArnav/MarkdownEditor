@@ -20,6 +20,7 @@ import { MarkdownTheme } from "@/utils/themeOptions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
 import { inlineAllStyles, fetchFromUrl, shareFile } from "@/lib/utils";
+import { ShareDialog } from "@/components/ShareDialog"; // Import the ShareDialog component
 
 // Dynamically import components that aren't needed on initial load
 const MarkdownPreview = lazy(() => import("@/components/MarkdownPreview").then(module => ({ default: module.MarkdownPreview })));
@@ -39,6 +40,7 @@ export const MarkdownEditor = () => {
   const [canRedo, setCanRedo] = useState(false);
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
   const [historyViewerOpen, setHistoryViewerOpen] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false); // Add state for ShareDialog
   const [markdownTheme, setMarkdownTheme] = useState<MarkdownTheme>(() => {
     return (localStorage.getItem("markdown-theme") as MarkdownTheme) || "github";
   });
@@ -201,14 +203,6 @@ export const MarkdownEditor = () => {
     })
   }
 
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // window.handleExportPDF = handleExportPDF; // Expose function to global scope for debugging.
-
-  //@ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // window.handleExportHTML = handleExportHTML;
-
   const handleToolbarAction = (action: string) => {
     const textarea = textareaRef.current;
 
@@ -232,8 +226,7 @@ export const MarkdownEditor = () => {
         handleExportPDF();
         return;
       case "share":
-        // alert("Not Implemented yet.");
-        handleShare();
+        setShareDialogOpen(true);
         return;
       case "htmlexport":
         handleExportHTML();
@@ -369,10 +362,6 @@ export const MarkdownEditor = () => {
     }, 0);
   };
 
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
-
   const handleSaveToLocalStorage = (dnd?: boolean) => {
     localStorage.setItem("markdown-content", markdown);
     if (dnd) return dnd;
@@ -382,10 +371,6 @@ export const MarkdownEditor = () => {
     });
     return dnd;
   };
-
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // window.handleSaveToLocalStorage = handleSaveToLocalStorage;
 
   var intervalId = setInterval(() => {
     handleSaveToLocalStorage(true)
@@ -436,30 +421,35 @@ export const MarkdownEditor = () => {
     });
   };
 
-  // Share Function
-  const handleShare = async (copyPreview?: boolean, dnd?: boolean) => {
-    const randomString = Math.random().toString(36).substring(2, 15);
-    const data = markdown;
-    const name = `yame-${randomString}.md`;
-    const time = 24;
-    const notify_func = (dnd) ? ((dt) => dnd) : toast;
-    const link = await shareFile(data, name, time, toast);
-    const yameLink = `${window.location.href}/?fetchFrom=${link}`;
-    const copyLink = copyPreview ? yameLink : link;
-    if (link) {
-      navigator
-        .clipboard
-        .writeText(copyLink);
+  // Handle the ShareDialog share action
+  const handleShareDocument = async (filename: string, duration: number): Promise<string> => {
+    try {
+      const data = markdown;
+      const link = await shareFile(data, filename, duration, toast);
+      return link;
+    } catch (error) {
+      console.error("Error sharing file:", error);
+      toast({
+        title: "Share Failed",
+        description: "There was an error generating the share link.",
+      });
+      throw error;
+    }
+  };
+
+  // Handle share dialog close action
+  const handleShareDialogClose = (action: string) => {
+    setShareDialogOpen(false);
+    
+    if (action.startsWith("copy")) {
       toast({
         title: "Link Copied",
         description: "The share link has been copied to your clipboard.",
       });
     }
-    return copyLink;
   };
 
   // Register keyboard shortcuts
-  // TODO: Add more shortcuts
   useHotkeys('ctrl+s', (e) => {
     e.preventDefault();
     handleSaveToLocalStorage();
@@ -472,7 +462,7 @@ export const MarkdownEditor = () => {
 
   useHotkeys('ctrl+shift+e', (e) => {
     e.preventDefault();
-    handleShare();
+    setShareDialogOpen(true);
   })
 
   useHotkeys('ctrl+b', (e) => {
@@ -555,7 +545,7 @@ export const MarkdownEditor = () => {
     handleExportPDF,
     handleSaveToFile,
     handleExportHTML,
-    handleShare,
+    handleShareDocument,
     fetchFromUrl,
     shareFile
   }
@@ -621,6 +611,14 @@ export const MarkdownEditor = () => {
         <FetchFromHTTP
           isOpen={isFetchDialogOpen}
           onClose={handleFetchFromUrl}
+        />
+
+        {/* Add ShareDialog component */}
+        <ShareDialog 
+          isOpen={shareDialogOpen}
+          onClose={handleShareDialogClose}
+          onShare={handleShareDocument}
+          initialFilename={`document-${Math.random().toString(36).substring(2, 8)}.md`}
         />
 
         <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
