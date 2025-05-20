@@ -4,6 +4,7 @@ import { WordCount } from "@/components/WordCount";
 import { Loading } from "@/components/ui/loading";
 import { useToast } from "@/components/ui/use-toast";
 import { HistoryManager } from "@/utils/historyManager";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +16,7 @@ import {
   ResizablePanel,
   ResizableHandle
 } from "@/components/ui/resizable";
-import { Save, Undo, Redo, Palette, History } from "lucide-react";
+import { Github } from "lucide-react";
 import { MarkdownTheme } from "@/utils/themeOptions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
@@ -68,6 +69,33 @@ export const MarkdownEditor = () => {
           alert(`Could not fetch document from ${fetchFrom}`);
           console.error("Error fetching data:", error);
         })
+    }
+  }, []);
+
+
+  // Check if first time user
+  // If the User has not used the app before, then the localStorage's key firstTime will be empty
+  // If the User has used the app before, then the localStorage's key firstTime will be "false"
+  useEffect(() => {
+    const firstTime = localStorage.getItem("firstTime");
+    if (firstTime === null) {
+      toast({
+        title: 'Welcome to Yame!',
+        description: 'We hope you enjoy using Yame. If you have any feedback or suggestions, please let us know!',
+        duration: 5000,
+        action: (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              window.open("https://github.com/NotoriousArnav/MarkdownEditor/issues", "_blank");
+            }}
+          >
+            <Github className="m-2 h-4 w-4" />
+          </Button>
+        )
+      })
+      localStorage.setItem("firstTime", "false");
     }
   }, []);
 
