@@ -50,7 +50,6 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <Eye size={24} />, name: "preview", tooltip: "Preview" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
     { icon: <CodeXml size={24} />, name: "htmlexport", tooltip: "Export HTML" },
-    { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },
   ];
 
   const previewModeToolbar = [
@@ -60,7 +59,6 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <CodeXml size={24} />, name: "htmlexport", tooltip: "Export HTML" },
     { icon: <Share size={24} />, name: "share", tooltip: "Share", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Palette size={24} />, name: "theme", tooltip: "Change Theme" },
-    { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },
   ];
 
   if (isPreviewMode) {
