@@ -12,12 +12,12 @@ export const useHotkeys = (key: string, callback: (e: KeyboardEvent) => void) =>
       // Parse the key combination
       const keys = key.toLowerCase().split('+');
       const mainKey = keys[keys.length - 1];
-      
+
       // Check for modifiers
       const needCtrl = keys.includes('ctrl');
       const needShift = keys.includes('shift');
       const needAlt = keys.includes('alt');
-      
+
       // Match the key and modifiers
       if (
         e.key.toLowerCase() === mainKey &&

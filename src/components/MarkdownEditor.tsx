@@ -5,16 +5,16 @@ import { WordCount } from "@/components/WordCount";
 import { Loading } from "@/components/ui/loading";
 import { useToast } from "@/components/ui/use-toast";
 import { HistoryManager } from "@/utils/historyManager";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { 
-  ResizablePanelGroup, 
-  ResizablePanel, 
-  ResizableHandle 
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle
 } from "@/components/ui/resizable";
 import { Save, Undo, Redo, Palette, History } from "lucide-react";
 import { MarkdownTheme } from "@/utils/themeOptions";
@@ -44,7 +44,7 @@ export const MarkdownEditor = () => {
     return (localStorage.getItem("markdown-theme") as MarkdownTheme) || "github";
   });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  
+
   const { toast } = useToast();
 
   //Check if url has ?preview=true
@@ -69,7 +69,7 @@ export const MarkdownEditor = () => {
         })
     }
   }, []);
-  
+
 
   // Update history control states
   useEffect(() => {
@@ -101,11 +101,11 @@ export const MarkdownEditor = () => {
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const value = textarea.value;
-      
+
       const newValue = value.substring(0, start) + '```\n\n```' + value.substring(end);
       setMarkdown(newValue);
       history.push(newValue);
-      
+
       // Set cursor position
       setTimeout(() => {
         textarea.selectionStart = start + 4;
@@ -119,11 +119,11 @@ export const MarkdownEditor = () => {
       const end = textarea.selectionEnd;
       const value = textarea.value;
       const selectedText = value.substring(start, end);
-      
+
       const newValue = value.substring(0, start) + '**' + selectedText + '**' + value.substring(end);
       setMarkdown(newValue);
       history.push(newValue);
-      
+
       // Set cursor position
       setTimeout(() => {
         if (selectedText.length === 0) {
@@ -233,7 +233,8 @@ export const MarkdownEditor = () => {
         handleExportPDF();
         return;
       case "share":
-        alert("Not Implemented yet.");
+        // alert("Not Implemented yet.");
+        handleShare();
         return;
       case "htmlexport":
         handleExportHTML();
@@ -250,7 +251,7 @@ export const MarkdownEditor = () => {
     const afterSelection = markdown.substring(end);
 
     let replacement = "";
-    
+
     switch (action) {
       case "keybinds":
         alert(`Keyboard Shortcuts:
@@ -356,11 +357,11 @@ export const MarkdownEditor = () => {
       default:
         return;
     }
-    
+
     const newValue = beforeSelection + replacement + afterSelection;
     setMarkdown(newValue);
     history.push(newValue);
-    
+
     // After state update, focus and set cursor position after inserted text
     setTimeout(() => {
       textarea.focus();
@@ -372,7 +373,7 @@ export const MarkdownEditor = () => {
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // window.handleToolbarAction = handleToolbarAction; // Expose function to global scope for debugging.
-  
+
   const handleSaveToLocalStorage = (dnd?: boolean) => {
     localStorage.setItem("markdown-content", markdown);
     if (dnd) return dnd;
@@ -410,8 +411,8 @@ export const MarkdownEditor = () => {
     if (!url) return;
     fetchFromUrl(url)
       .then((data) => {
-      setMarkdown(data);
-    })
+        setMarkdown(data);
+      })
       .catch((error) => {
         alert(`Could not fetch document from ${url}`);
         console.error("Error fetching data:", error);
@@ -429,11 +430,55 @@ export const MarkdownEditor = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     toast({
       title: "File Downloaded",
       description: "Your markdown has been saved to disk.",
     });
+  };
+
+  const handleShare = async () => {
+    const randomString = Math.random().toString(36).substring(2, 15);
+    const file = new File([markdown], `yame_${randomString}.md`, {
+      type: 'text/markdown',
+    });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('time', '24'); // 24 hours
+
+    try {
+      const response = await fetch('https://share.nnisarg.in/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error(errorData);
+        throw new Error(errorData);
+      }
+
+      const shareURL = (await response.text()).trim();
+
+      toast({
+        title: "File Shared",
+        description: `Your file can be accessed at: ${shareURL} for 24 hours! We've also copied the link to clipboard :D`,
+      });
+
+      await navigator.clipboard.writeText(shareURL);
+
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Share Failed",
+        description: `Could not share the file: ${error}`,
+        variant: "destructive",
+      });
+    }
   };
 
 
@@ -443,7 +488,17 @@ export const MarkdownEditor = () => {
     e.preventDefault();
     handleSaveToLocalStorage();
   });
-  
+
+  useHotkeys('ctrl+shift+s', (e) => {
+    e.preventDefault();
+    handleSaveToFile();
+  })
+
+  useHotkeys('ctrl+shift+e', (e) => {
+    e.preventDefault();
+    handleShare();
+  })
+
   useHotkeys('ctrl+b', (e) => {
     e.preventDefault();
     handleToolbarAction("bold");
@@ -500,12 +555,12 @@ export const MarkdownEditor = () => {
     e.preventDefault();
     handleToolbarAction("undo");
   });
-  
+
   useHotkeys('ctrl+y', (e) => {
     e.preventDefault();
     handleToolbarAction("redo");
   });
-  
+
   useHotkeys('ctrl+h', (e) => {
     e.preventDefault();
     setHistoryViewerOpen(true);
@@ -515,7 +570,7 @@ export const MarkdownEditor = () => {
     e.preventDefault();
     setIsPreviewMode(!isPreviewMode);
   });
-  
+
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   window.yame = {
@@ -530,48 +585,48 @@ export const MarkdownEditor = () => {
   return (
     <Suspense fallback={<Loading />}>
       <div className="flex flex-col h-full overflow-hidden">
-      
-      <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
-      
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
-      {!isPreviewMode ? (
-          <ResizablePanelGroup direction="horizontal" className="flex-1">
-            <ResizablePanel defaultSize={50} minSize={30}>
-              <div className="flex-1 flex flex-col h-full min-w-0">
-                <textarea
-                  ref={textareaRef}
-                  value={markdown}
-                  onChange={handleChange}
-                  onKeyDown={handleKeyDown}
-                  className="flex-1 p-4 resize-none focus:outline-none font-mono text-sm leading-relaxed bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 h-full"
-                  placeholder="Start writing your markdown here..."
-                />
-                <div className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
-                  <WordCount text={markdown} />
-                </div>
-              </div>
-            </ResizablePanel>
-            
-            <ResizableHandle withHandle />
-            
-            <ResizablePanel defaultSize={50} minSize={30}>
-              <div className="h-full overflow-auto">
-                <MarkdownPreview markdown={markdown} theme={markdownTheme} />
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        ) : (
-          <div className="flex-1 overflow-auto">
-            <MarkdownPreview markdown={markdown} theme={markdownTheme} />
-          </div>
-        )}
-      </div>
 
-        <ThemeSelector 
-            isOpen={themeDialogOpen}
-            currentTheme={markdownTheme} 
-            onThemeChange={setMarkdownTheme}
-            onClose={() => setThemeDialogOpen(false)}
+        <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
+          {!isPreviewMode ? (
+            <ResizablePanelGroup direction="horizontal" className="flex-1">
+              <ResizablePanel defaultSize={50} minSize={30}>
+                <div className="flex-1 flex flex-col h-full min-w-0">
+                  <textarea
+                    ref={textareaRef}
+                    value={markdown}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    className="flex-1 p-4 resize-none focus:outline-none font-mono text-sm leading-relaxed bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 h-full"
+                    placeholder="Start writing your markdown here..."
+                  />
+                  <div className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
+                    <WordCount text={markdown} />
+                  </div>
+                </div>
+              </ResizablePanel>
+
+              <ResizableHandle withHandle />
+
+              <ResizablePanel defaultSize={50} minSize={30}>
+                <div className="h-full overflow-auto">
+                  <MarkdownPreview markdown={markdown} theme={markdownTheme} />
+                </div>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          ) : (
+            <div className="flex-1 overflow-auto">
+              <MarkdownPreview markdown={markdown} theme={markdownTheme} />
+            </div>
+          )}
+        </div>
+
+        <ThemeSelector
+          isOpen={themeDialogOpen}
+          currentTheme={markdownTheme}
+          onThemeChange={setMarkdownTheme}
+          onClose={() => setThemeDialogOpen(false)}
         />
 
         <HistoryViewer
@@ -584,14 +639,14 @@ export const MarkdownEditor = () => {
             history.push(content);
           }}
         />
-        
+
         <FetchFromHTTP
-            isOpen={isFetchDialogOpen}
-            onClose={handleFetchFromUrl}
+          isOpen={isFetchDialogOpen}
+          onClose={handleFetchFromUrl}
         />
 
-      <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
-    </div>
+        <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
+      </div>
     </Suspense>
   );
 };
