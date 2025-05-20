@@ -3,6 +3,8 @@ YAME is a simple and lightweight Markdown editor built with React. It allows use
 
 > **Baptism of Code Ongoing, to remove the sins of the developer, future commits may contain breaking Changes**
 
+![Screenshot](public/screenshot-1.png)
+
 ## Getting Started
 To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownEditor/) in your browser. If you are using **Chromium based Browsers** you can install it straight from the browser, regardless of the OS/Platform you are on. 
 
