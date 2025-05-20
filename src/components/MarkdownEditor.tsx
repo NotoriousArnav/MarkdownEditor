@@ -191,7 +191,7 @@ export const MarkdownEditor = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename || 'document.html';
+    a.download = filename || 'yame-document.html';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -409,7 +409,7 @@ export const MarkdownEditor = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'document.md';
+    a.download = 'yame-document.md';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -618,7 +618,7 @@ export const MarkdownEditor = () => {
           isOpen={shareDialogOpen}
           onClose={handleShareDialogClose}
           onShare={handleShareDocument}
-          initialFilename={`document-${Math.random().toString(36).substring(2, 8)}.md`}
+          initialFilename={`yame-document-${Math.random().toString(36).substring(2, 8)}.md`}
         />
 
         <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
