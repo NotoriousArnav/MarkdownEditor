@@ -29,7 +29,7 @@ export function FetchFromHTTP({ isOpen, onClose }: FetchFromHTTPProps) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-4 gap-4 py-4">
-          <Input 
+          <Input
             ref={inputRef}
             className="col-span-3"
           />
@@ -38,7 +38,7 @@ export function FetchFromHTTP({ isOpen, onClose }: FetchFromHTTPProps) {
             className="w-full"
             variant="outline"
           >
-          Fetch
+            Fetch
           </Button>
         </div>
       </DialogContent>

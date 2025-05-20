@@ -14,7 +14,7 @@ export class HistoryManager<T> {
     if (this.currentIndex < this.history.length - 1) {
       this.history = this.history.slice(0, this.currentIndex + 1);
     }
-    
+
     this.history.push(state);
     this.currentIndex = this.history.length - 1;
   }

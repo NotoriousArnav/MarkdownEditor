@@ -15,10 +15,10 @@ interface HistoryViewerProps {
 
 export const HistoryViewer = ({ isOpen, onClose, history, currentContent, setContent }: HistoryViewerProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  
+
   // Get all history items
   const historyItems = history.getHistory();
-  
+
   const handleRestore = () => {
     if (selectedIndex !== null && historyItems[selectedIndex]) {
       setContent(historyItems[selectedIndex]);
@@ -32,13 +32,13 @@ export const HistoryViewer = ({ isOpen, onClose, history, currentContent, setCon
         <DialogHeader>
           <DialogTitle>Edit History</DialogTitle>
         </DialogHeader>
-        
+
         <div className="flex flex-1 gap-4 min-h-0 overflow-hidden">
           <div className="w-1/3 border rounded-md">
             <ScrollArea className="h-full">
               <div className="p-2">
                 {historyItems.map((item, index) => (
-                  <div 
+                  <div
                     key={index}
                     className={`p-2 mb-1 cursor-pointer rounded truncate hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedIndex === index ? 'bg-gray-200 dark:bg-gray-600' : ''}`}
                     onClick={() => setSelectedIndex(index)}
@@ -52,7 +52,7 @@ export const HistoryViewer = ({ isOpen, onClose, history, currentContent, setCon
               </div>
             </ScrollArea>
           </div>
-          
+
           <div className="w-2/3 border rounded-md">
             <ScrollArea className="h-full">
               {selectedIndex !== null ? (
@@ -67,11 +67,11 @@ export const HistoryViewer = ({ isOpen, onClose, history, currentContent, setCon
             </ScrollArea>
           </div>
         </div>
-        
+
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button 
-            onClick={handleRestore} 
+          <Button
+            onClick={handleRestore}
             disabled={selectedIndex === null}
           >
             Restore This Version

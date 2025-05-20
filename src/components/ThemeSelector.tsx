@@ -20,11 +20,11 @@ interface ThemeSelectorProps {
   onThemeChange: (theme: MarkdownTheme) => void;
 }
 
-export const ThemeSelector = ({ 
-  isOpen, 
-  onClose, 
-  currentTheme, 
-  onThemeChange 
+export const ThemeSelector = ({
+  isOpen,
+  onClose,
+  currentTheme,
+  onThemeChange
 }: ThemeSelectorProps) => {
   const [selectedTheme, setSelectedTheme] = useState<MarkdownTheme>(currentTheme);
 
@@ -43,8 +43,8 @@ export const ThemeSelector = ({
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
-          <RadioGroup 
-            value={selectedTheme} 
+          <RadioGroup
+            value={selectedTheme}
             onValueChange={(value) => setSelectedTheme(value as MarkdownTheme)}
             className="space-y-3"
           >

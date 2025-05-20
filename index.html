@@ -1,52 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yame</title>
-    
-    <meta name="title" content="Markdown Editor" />
-    <meta name="description" content="A simple markdown editor" />
-    <meta name="author" content="NotoriousArnav" />
-    <meta name="keywords" content="markdown, editor, simple" />
-    <meta name="theme-color" content="#ffffff" />
 
-    <meta property="og:title" content="(yame) Yet Another Markdown Editor" />
-    <meta property="og:description" content="A simple markdown editor" />
-    <meta property="og:type" content="website" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yame</title>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="(yame) Yet Another Markdown Editor" />
-    <meta name="twitter:description" content="A simple markdown editor" />
-    <meta name="twitter:creator" content="@arnv2004" />
+  <meta name="title" content="Markdown Editor" />
+  <meta name="description" content="A simple markdown editor" />
+  <meta name="author" content="NotoriousArnav" />
+  <meta name="keywords" content="markdown, editor, simple" />
+  <meta name="theme-color" content="#ffffff" />
 
-    <link rel="icon" type="image/svg+xml" href="yame.png">
-    <link rel="manifest" href="manifest.json">
+  <meta property="og:title" content="(yame) Yet Another Markdown Editor" />
+  <meta property="og:description" content="A simple markdown editor" />
+  <meta property="og:type" content="website" />
 
-  </head>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="(yame) Yet Another Markdown Editor" />
+  <meta name="twitter:description" content="A simple markdown editor" />
+  <meta name="twitter:creator" content="@arnv2004" />
 
-  <script>
-    if (typeof navigator.serviceWorker !== 'undefined') {
-      // Register the service worker
-      navigator.serviceWorker.register('sw.js')
-    }
-  </script>
+  <link rel="icon" type="image/svg+xml" href="yame.png">
+  <link rel="manifest" href="manifest.json">
 
-  <body id="root">
-    <noscript>
-      <h1>Yame</h1>
-      <p>Yet Another Markdown Editor</p>
-      <p>
-        The GitHub Repo: <a href="https://github.com/NotoriousArnav/MarkdownEditor">GitHub</a>
-        <br />
-        Yame is a simple and lightweight Markdown editor built with React with no Server side dependencies to maintain Privacy and Security of user's Data.
-      </p>
-      <hr />
-      <strong>
-        We're sorry but Yame doesn't work properly without JavaScript
-        enabled. Please enable it to continue.
-      </strong>
-    </noscript>
-  </body>
-  <script type="module" src="/src/main.tsx"></script>
+</head>
+
+<script>
+  if (typeof navigator.serviceWorker !== 'undefined') {
+    // Register the service worker
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+
+<body id="root">
+  <noscript>
+    <h1>Yame</h1>
+    <p>Yet Another Markdown Editor</p>
+    <p>
+      The GitHub Repo: <a href="https://github.com/NotoriousArnav/MarkdownEditor">GitHub</a>
+      <br />
+      Yame is a simple and lightweight Markdown editor built with React with no Server side dependencies to maintain
+      Privacy and Security of user's Data.
+    </p>
+    <hr />
+    <strong>
+      We're sorry but Yame doesn't work properly without JavaScript
+      enabled. Please enable it to continue.
+    </strong>
+  </noscript>
+</body>
+<script type="module" src="/src/main.tsx"></script>
+
 </html>
