@@ -21,7 +21,7 @@ interface MarkdownPreviewProps {
 
 export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
   const { toast } = useToast();
-  
+
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   window.inlineAllStyles = inlineAllStyles;
@@ -34,17 +34,17 @@ export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
       duration: 2000,
     });
   };
-  
+
   return (
     <div id="mdwindow" className={`p-4 prose prose-sm md:prose-base max-w-none overflow-auto h-full markdown-preview dark:prose-invert markdown-theme-${theme}`}>
-      <ReactMarkdown 
-        remarkPlugins={[remarkGfm, remarkMath]} 
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeSanitize, rehypeRaw, rehypeKatex]}
         components={{
-          code({className, children, ...props}) {
+          code({ className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
             const codeString = String(children).replace(/\n$/, '');
-            
+
             return match ? (
               <div className="relative group">
                 <Button
@@ -75,7 +75,7 @@ export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
       >
         {markdown}
       </ReactMarkdown>
-      
+
       {!markdown && (
         <div className="text-gray-400 dark:text-gray-500 italic">
           Preview will appear here.

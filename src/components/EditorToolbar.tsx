@@ -1,8 +1,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { 
-  Bold, Italic, Heading1, Heading2, Heading3, Link, Image, Code, Quote, List, ListOrdered, 
+import {
+  Bold, Italic, Heading1, Heading2, Heading3, Link, Image, Code, Quote, List, ListOrdered,
   Trash2, Save, Eye, Edit, Undo, Redo, History, Download, Palette, Keyboard, FileText, Github,
   FolderOpen, CloudDownload, Share, CodeXml
 } from "lucide-react";
@@ -34,7 +34,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
 
   const actions = [
     { icon: <Keyboard size={24} />, name: "keybinds", tooltip: "Keyboard Shortcuts" },
-    { icon: <Undo size={24} />, name: "undo", tooltip: "Undo"},
+    { icon: <Undo size={24} />, name: "undo", tooltip: "Undo" },
     { icon: <Redo size={24} />, name: "redo", tooltip: "Redo" },
     { icon: <History size={24} />, name: "history", tooltip: "History" },
     { icon: <Trash2 size={24} />, name: "clear", tooltip: "Clear Editor", className: "text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300" },
@@ -43,10 +43,10 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <Save size={24} />, name: "save", tooltip: "Save to Browser", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
   ];
-  
+
   const extraActions: { icon: JSX.Element; name: string; tooltip: string; className?: string }[] = [
     { icon: <Share size={24} />, name: "share", tooltip: "Share", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
-    { icon: <Palette size={24} />, name: "theme", tooltip: "Change Markdown Theme"},
+    { icon: <Palette size={24} />, name: "theme", tooltip: "Change Markdown Theme" },
     { icon: <Eye size={24} />, name: "preview", tooltip: "Preview" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
     { icon: <CodeXml size={24} />, name: "htmlexport", tooltip: "Export HTML" },
@@ -58,7 +58,8 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
     { icon: <Download size={24} />, name: "download", tooltip: "Download", className: "text-blue-800 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
     { icon: <CodeXml size={24} />, name: "htmlexport", tooltip: "Export HTML" },
-    { icon: <Palette size={24} />, name: "theme", tooltip: "Change Theme"},
+    { icon: <Share size={24} />, name: "share", tooltip: "Share", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
+    { icon: <Palette size={24} />, name: "theme", tooltip: "Change Theme" },
     { icon: <ThemeToggle />, name: "themeToggle", tooltip: "Toggle Theme", className: "h-8 w-8 p-0" },
   ];
 
@@ -92,7 +93,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
   /* This is Edit mode Toolbar */
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2 mb-3 flex flex-wrap items-center gap-1">
-      
+
       <TooltipProvider>
         {tools.map((tool) => (
           <Tooltip key={tool.name}>
@@ -112,9 +113,9 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
             </TooltipContent>
           </Tooltip>
         ))}
-        
+
         <div className="h-8 border-r border-gray-200 dark:border-gray-700 mx-1"></div>
-        
+
         {actions.map((action) => (
           <Tooltip key={action.name}>
             <TooltipTrigger asChild>
@@ -163,22 +164,23 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
               toast({
                 title: "Made with ❤️ by @NotoriousArnav",
                 description: "Click the Button to visit the Repo",
-                duration: 5*1000,
+                duration: 5 * 1000,
                 action: (
                   <Button
                     variant="ghost"
                     size="sm"
                     className="h-8 w-8 p-0"
                     onClick={() => {
-                      window.open("https://github.com/NotoriousArnav/MarkdownEditor", "_blank");}}
+                      window.open("https://github.com/NotoriousArnav/MarkdownEditor", "_blank");
+                    }}
                   >
-                      <Github />
+                    <Github />
                   </Button>
                 ),
               })
             }}
           >
-          <Github />
+            <Github />
           </Button>
         </div>
       </div>

@@ -28,6 +28,12 @@
       "sizes": "1920x1080",
       "type": "image/png",
       "platform": "wide"
+    },
+    {
+      "src": "screenshot-1.png",
+      "sizes": "1893x1025",
+      "type": "image/png",
+      "platform": "desktop"
     }
   ]
 }
