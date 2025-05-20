@@ -7,6 +7,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+const SWFTInstance = import.meta.env.VITE_SWFT_INSTANCE || "https://share.nnisarg.in/";
+
+// @ts-ignore
+// eslint-disable-next-line
+window.SWFTInstance = SWFTInstance
 
 export function inlineAllStyles(el: HTMLElement): string {
   const clone = el.cloneNode(true) as HTMLElement;
@@ -37,7 +42,7 @@ export async function shareFile(
     name: string,
     time: int = 24,
     toast = (obj) => {alert(`${obj.title}\n${obj.description}`)},
-    instance: string = "https://share.nnisarg.in/",
+    instance: string = SWFTInstance,
   ) {
   const formData = new FormData();
   const file = new File(
