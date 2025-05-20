@@ -11,7 +11,7 @@ To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownE
 ## Features
 - Supports Github, Notion, Dev.to and Medium markdown flavors
 - ~Meth~ Math Support
-- File Sharing Support ( Thanks @hect1k )
+- File Sharing Support ( Thanks [@hect1k](https://github.com/hect1k) ) )
 - Allows exporting to PDF and HTML
 - Minimal and Lightweight (debatable, but atleast its lighter than ur mom)
 - No Server-side dependencies (Really)
