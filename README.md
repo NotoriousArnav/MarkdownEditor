@@ -24,6 +24,8 @@ To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownE
 
 ## TODOS:
 - **MAIN FOCUS** Extensions Support to allow devs to make custom extensions and add them to the editor
+- Refinement of Theme API
+- Refinement of Exports to PDF and HTML to produce Consistent outputs
 - Multi File Support to allow multiple tabs and allow Notebook like functionality like Obsidian **Sometimes I think this is unnecessary**
 - Allow changing Code Block Themes
 - Add more Markdown flavors

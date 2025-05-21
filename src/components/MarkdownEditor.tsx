@@ -183,7 +183,7 @@ export const MarkdownEditor = () => {
 
     const opt = {
       margin: 0.5,
-      filename: filename || 'markdown.pdf',
+      filename: filename || 'yame-markdown.pdf',
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -212,7 +212,8 @@ export const MarkdownEditor = () => {
   const handleExportHTML = (filename?: string, dnd?: boolean) => {
     const el = document.getElementById("mdwindow");
     if (!el) return;
-    const htmlString = inlineAllStyles(el);
+    const data = inlineAllStyles(el);
+    const htmlString = `<!DOCTYPE html5 lang="en"><html><head><style>.katex-html{display: none} [aria-hidden="true"]{display: none}]</style><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script></head><body><!-- Exported From Yame -->${data}</body></html>`; // Wrap in <html> and <body>
     const blob = new Blob([htmlString], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
