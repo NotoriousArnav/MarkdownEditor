@@ -63,7 +63,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
 
   if (isPreviewMode) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2 mb-3 flex flex-wrap items-center gap-1">
+      <div role="toolbar" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2 mb-3 flex flex-wrap items-center gap-1">
         <TooltipProvider>
           {previewModeToolbar.map((tool) => (
             <Tooltip key={tool.name}>
