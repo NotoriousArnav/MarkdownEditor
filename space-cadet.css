@@ -1,136 +1,137 @@
 /*
   SpaceCadet External Theme for MarkdownEditor (YAME)
   Colors from image1:
-    Teal:   #1b998b (Primary backgrounds, accents)
-    Pink:   #ed217c (Main highlight/accent, links)
-    Navy:   #2d3047 (Code blocks, headings, strong contrast)
-    Yellow: #fffd82 (Main text, subtle backgrounds, inline code)
-    Orange: #ff9b71 (Secondary accent, blockquotes, highlights)
+    Sea Green: #008148 (Main background for body and modals)
+    Pink:   #ed217c (Buttons, active elements, and text)
+    Navy:   #2d3047 (Main Background, text area, preview and toolbar)
+    Yellow: #fffd82 (Text color for text area, preview and toolbar)
+    Orange: #ff9b71 (Word count and other elements)
+    Font:    'Segoe UI', Helvetica, Arial, sans-serif
+
+    Every component has been assigned a Role, like:
+    - editor role is assigned to the textarea that holds the markdown text
+    - preview role is assigned to the div that shows the rendered markdown
+    - toolbar role is assigned to the div that holds the Buttons
+    - wordcount role is assigned to the div that shows the word count
+    - dialog role is assigned to every modal dialog
+
+    Roles can be accessed by using the el[role='role'] selector, where el is the element you want to select or if unsure can be empty.
+    - Example: textarea[role='editor'] will select the textarea that holds the markdown text
+    - Example: div[role='preview'] will select the div that shows the rendered markdown
+    - Example: div[role='toolbar'] will select the div that holds the Buttons
+    - Example: div[role='wordcount'] will select the div that shows the word Count
+    - Example: div[role='dialog'] will select the div that shows the modal dialog
 */
 
-body, html {
-  background: #1b998b !important;       /* Teal as main background */
-  color: #2d3047 !important;            /* Navy as default text for strong contrast */
-  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+/* Variable Definitions */
+:root {
+  --main-bg-color: #008148; /* Sea Green */
+  --button-bg-color: #ed217c; /* Pink */
+  --main-bg-color-2: #2d3047; /* Navy */
+  --text-color: #fffd82; /* Yellow */
+  --text-color-2: #ff9b71; /* Orange */
+  --font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
 }
 
-/* Headings: Navy for structure, pink underline for accent */
-h1, h2, h3, h4, h5, h6 {
-  color: #2d3047 !important;
-  border-bottom: 2px solid #ed217c;
-  padding-bottom: 0.2em;
-  margin-top: 1.2em;
-  margin-bottom: 0.5em;
+/* General Styles */
+main {
+  background-color: var(--main-bg-color)!important;
+  color: var(--text-color);
+  font-family: var(--font-family);
 }
 
-h1 { font-size: 2.2em; }
-h2 { font-size: 1.7em; }
-h3 { font-size: 1.3em; }
-h4, h5, h6 { font-size: 1.1em; }
+/* Editor Styles */
 
-/* Links: Pink, with yellow hover */
-a {
-  color: #ed217c !important;
-  text-decoration: underline;
-  transition: color 0.2s, background 0.2s;
-}
-a:hover {
-  color: #fffd82 !important;
-  background: #2d304711 !important;
+textarea[role='editor'] {
+  background-color: var(--main-bg-color-2);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
+  height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 
-/* Emphasis and strong: orange for strong, pink for em */
-strong, b {
-  color: #ff9b71 !important;
-}
-em, i {
-  color: #ed217c !important;
-}
-
-/* Inline code: yellow background, navy text */
-code {
-  background: #fffd82 !important;
-  color: #2d3047 !important;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-family: 'Fira Mono', 'Consolas', monospace;
+input {
+  background-color: var(--main-bg-color-2)!important;
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
 }
 
-/* Code blocks: navy background, yellow text, orange border */
-pre, pre code {
-  background: #2d3047 !important;
-  color: #fffd82 !important;
-  border: 2px solid #ff9b71;
-  border-radius: 6px;
-  padding: 1em;
-  margin: 1.5em 0;
-  overflow-x: auto;
+button[role="combobox"] {
+  background-color: var(--main-bg-color-2)!important;
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
 }
 
-/* Blockquotes: orange accent, yellow background, navy text */
-blockquote {
-  border-left: 6px solid #ff9b71;
-  background: #fffd8222;
-  color: #2d3047 !important;
-  padding: 0.7em 1.2em;
-  margin: 1.5em 0;
-  font-style: italic;
+div[role="selectcontent"] {
+  background-color: var(--main-bg-color-2)!important;
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
 }
 
-/* Lists: navy text, teal bullets */
-ul, ol {
-  color: #2d3047 !important;
-  margin-left: 2em;
-}
-ul li::marker, ol li::marker {
-  color: #1b998b;
-}
-
-/* Tables: navy header, yellow cells, orange borders */
-table {
-  border-collapse: collapse;
-  margin: 1em 0;
-  width: 100%;
-}
-th, td {
-  border: 1.5px solid #ff9b71;
-  padding: 0.5em 1em;
-}
-th {
-  background: #2d3047;
-  color: #fffd82;
-}
-td {
-  background: #fffd82;
-  color: #2d3047;
+/* Preview Styles */
+div[role='preview'] {
+  background-color: var(--main-bg-color-2);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
+  height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 
-/* Horizontal rules: pink */
-hr {
-  border: 1.5px solid #ed217c;
+/* Toolbar Styles */
+div[role='toolbar'] {
+  background-color: var(--main-bg-color-2);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid #1b998b;
+  padding: 10px;
+  border-radius: 5px;
 }
 
-/* Selection */
-::selection {
-  background: #ed217c;
-  color: #fffd82;
+/* Button Styles */ 
+[role='button'] {
+  background-color: var(--button-bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Buttons, Inputs, UI elements */
-button, input, select, textarea {
-  background: #fffd82 !important;
-  color: #2d3047 !important;
-  border: 1.5px solid #ed217c;
-  border-radius: 3px;
-  padding: 0.3em 0.6em;
+[role='button']:hover {
+  background-color: var(--text-color);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 12px;
-  background: #1b998b;
+/* Word Count Styles */ 
+div[role='wordcount'] {
+  background-color: var(--main-bg-color-2);
+  color: var(--text-color-2);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
 }
-::-webkit-scrollbar-thumb {
-  background: #2d3047;
-  border-radius: 6px;
+/* Dialog Styles */
+div[role='dialog'] {
+  background-color: var(--main-bg-color-2);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
 }
