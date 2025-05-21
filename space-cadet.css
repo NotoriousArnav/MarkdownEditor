@@ -1,7 +1,7 @@
 /*
   SpaceCadet External Theme for MarkdownEditor (YAME)
   Colors from image1:
-    Sea Green: #008148 (Main background for body and modals)
+    Violet (JTC): #503047
     Pink:   #ed217c (Buttons, active elements, and text)
     Navy:   #2d3047 (Main Background, text area, preview and toolbar)
     Yellow: #fffd82 (Text color for text area, preview and toolbar)
@@ -25,12 +25,16 @@
 
 /* Variable Definitions */
 :root {
-  --main-bg-color: #008148; /* Sea Green */
+  --main-bg-color: #503047; /* Sea Green */
   --button-bg-color: #ed217c; /* Pink */
   --main-bg-color-2: #2d3047; /* Navy */
   --text-color: #fffd82; /* Yellow */
   --text-color-2: #ff9b71; /* Orange */
   --font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+* {
+  color:var(--text-color)!important;
 }
 
 /* General Styles */
@@ -81,15 +85,17 @@ div[role="selectcontent"] {
 }
 
 /* Preview Styles */
-div[role='preview'] {
+div#mdwindow {
   background-color: var(--main-bg-color-2);
-  color: var(--text-color);
+  color: var(--text-color)!important;
   font-family: var(--font-family);
   border: 1px solid var(--button-bg-color);
   padding: 10px;
   border-radius: 5px;
-  height: calc(100vh - 200px);
-  overflow-y: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color)!important;
 }
 
 /* Toolbar Styles */
@@ -118,7 +124,7 @@ div[role='toolbar'] {
 }
 
 /* Word Count Styles */ 
-div[role='wordcount'] {
+[role='wordcount'], #wordcount {
   background-color: var(--main-bg-color-2);
   color: var(--text-color-2);
   font-family: var(--font-family);
@@ -134,4 +140,8 @@ div[role='dialog'] {
   border: 1px solid var(--button-bg-color);
   padding: 10px;
   border-radius: 5px;
+}
+
+[role="editor-container"] {
+  border: 1px solid var(--buuton-bg-color);
 }
