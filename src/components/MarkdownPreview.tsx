@@ -38,6 +38,7 @@ export const MarkdownPreview = ({ markdown, theme }: MarkdownPreviewProps) => {
   return (
     <div id="mdwindow" className={`p-4 prose prose-sm md:prose-base max-w-none overflow-auto h-full markdown-preview dark:prose-invert markdown-theme-${theme}`}>
       <ReactMarkdown
+        role="preview"
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeSanitize, rehypeRaw, rehypeKatex]}
         components={{

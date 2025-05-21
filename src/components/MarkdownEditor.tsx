@@ -582,7 +582,7 @@ export const MarkdownEditor = () => {
 
         <EditorToolbar onAction={handleToolbarAction} isPreviewMode={isPreviewMode} />
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
+        <div role="editor-container" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
           {!isPreviewMode ? (
             <ResizablePanelGroup direction="horizontal" className="flex-1">
               <ResizablePanel defaultSize={50} minSize={30}>
@@ -596,8 +596,8 @@ export const MarkdownEditor = () => {
                     className="flex-1 p-4 resize-none focus:outline-none font-mono text-sm leading-relaxed bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 h-full"
                     placeholder="Start writing your markdown here..."
                   />
-                  <div className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
-                    <WordCount role="wordcount" text={markdown} />
+                  <div role="wordcount" className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
+                    <WordCount text={markdown} />
                   </div>
                 </div>
               </ResizablePanel>
