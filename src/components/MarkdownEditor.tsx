@@ -589,6 +589,7 @@ export const MarkdownEditor = () => {
                 <div className="flex-1 flex flex-col h-full min-w-0">
                   <textarea
                     ref={textareaRef}
+                    role="editor"
                     value={markdown}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
@@ -596,7 +597,7 @@ export const MarkdownEditor = () => {
                     placeholder="Start writing your markdown here..."
                   />
                   <div className="border-t border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900">
-                    <WordCount text={markdown} />
+                    <WordCount role="wordcount" text={markdown} />
                   </div>
                 </div>
               </ResizablePanel>
@@ -605,13 +606,13 @@ export const MarkdownEditor = () => {
 
               <ResizablePanel defaultSize={50} minSize={30}>
                 <div className="h-full overflow-auto">
-                  <MarkdownPreview markdown={markdown} theme={markdownTheme} />
+                  <MarkdownPreview role="preview" markdown={markdown} theme={markdownTheme} />
                 </div>
               </ResizablePanel>
             </ResizablePanelGroup>
           ) : (
             <div className="flex-1 overflow-auto">
-              <MarkdownPreview markdown={markdown} theme={markdownTheme} />
+              <MarkdownPreview role="preview" markdown={markdown} theme={markdownTheme} />
             </div>
           )}
         </div>
