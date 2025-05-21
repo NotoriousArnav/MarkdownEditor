@@ -40,7 +40,7 @@ export const HistoryViewer = ({ isOpen, onClose, history, currentContent, setCon
                 {historyItems.map((item, index) => (
                   <div
                     key={index}
-                    className={`p-2 mb-1 cursor-pointer rounded truncate hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedIndex === index ? 'bg-gray-200 dark:bg-gray-600' : ''}`}
+                    className={`p-2 mb-1 cursor-pointer rounded truncate hover:bg-gray-100 hover:text-black dark:hover:bg-gray-700 ${selectedIndex === index ? 'brightness-150 bg-blend-overlay invert text-black bg-gray-100' : ''}`}
                     onClick={() => setSelectedIndex(index)}
                   >
                     <div className="font-medium">Version {index + 1}</div>
