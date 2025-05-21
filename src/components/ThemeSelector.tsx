@@ -142,8 +142,7 @@ export const ThemeSelector = ({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave}>Apply Theme</Button>
+          <Button onClick={() => {handleSave();onClose()}}>Apply Theme</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

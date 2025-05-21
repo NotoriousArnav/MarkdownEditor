@@ -144,3 +144,13 @@ div[role='dialog'] {
 [role="editor-container"] {
   border: 1px solid var(--buuton-bg-color);
 }
+
+/* status */
+[role="status"] {
+  background-color: var(--main-bg-color-2);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  border: 1px solid var(--button-bg-color);
+  padding: 10px;
+  border-radius: 5px;
+}

@@ -573,7 +573,8 @@ export const MarkdownEditor = () => {
     handleExportHTML,
     handleShareDocument,
     fetchFromUrl,
-    shareFile
+    shareFile,
+    toast
   }
 
   return (
