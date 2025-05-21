@@ -33,6 +33,10 @@
   --font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
 }
 
+* {
+  color:var(--text-color)!important;
+}
+
 /* General Styles */
 main {
   background-color: var(--main-bg-color)!important;

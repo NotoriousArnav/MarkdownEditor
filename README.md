@@ -30,7 +30,6 @@ To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownE
 - Get a Nice Logo **Important**
 
 ## Note for Theme Developers
-- Soon a Theme Marketplace will be opened, where you can submit your themes to make it easier for the user to install and use themes.
 - There is no official Documentation for the Theme Selector, but we reccomend you to refer to [public/space-cadet.css](public/space-cadet.css) to get an Idea about how to make a theme.
 - There is an Attempt going on to make external themes get working, but we are also trying hard not to break the existing light and dark themes, so we reccomend you to read the source code to understand and apply hacks to make your themes work.
 - By any means, if you think existing theme api is not sufficient, please immediately open an issue and it would be also great if you can provide a PR or a Very Detailed comment on the Issue to provide a Fix.
