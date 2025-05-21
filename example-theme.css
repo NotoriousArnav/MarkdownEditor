@@ -40,9 +40,6 @@ body[data-theme="external"] {
   color: var(--link);
 }
 
-[data-theme="external"] .modal,
-[data-theme="external"] .DialogContent,
-[data-theme="external"] .dialog-content
 [data-theme="external"] div[role="dialog"] {
   background: #4e342e !important; /* deep brown, not transparent */
   color: var(--foreground) !important;

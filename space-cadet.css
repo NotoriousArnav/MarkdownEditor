@@ -1,0 +1,136 @@
+/*
+  SpaceCadet External Theme for MarkdownEditor (YAME)
+  Colors from image1:
+    Teal:   #1b998b (Primary backgrounds, accents)
+    Pink:   #ed217c (Main highlight/accent, links)
+    Navy:   #2d3047 (Code blocks, headings, strong contrast)
+    Yellow: #fffd82 (Main text, subtle backgrounds, inline code)
+    Orange: #ff9b71 (Secondary accent, blockquotes, highlights)
+*/
+
+body, html {
+  background: #1b998b !important;       /* Teal as main background */
+  color: #2d3047 !important;            /* Navy as default text for strong contrast */
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+/* Headings: Navy for structure, pink underline for accent */
+h1, h2, h3, h4, h5, h6 {
+  color: #2d3047 !important;
+  border-bottom: 2px solid #ed217c;
+  padding-bottom: 0.2em;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.7em; }
+h3 { font-size: 1.3em; }
+h4, h5, h6 { font-size: 1.1em; }
+
+/* Links: Pink, with yellow hover */
+a {
+  color: #ed217c !important;
+  text-decoration: underline;
+  transition: color 0.2s, background 0.2s;
+}
+a:hover {
+  color: #fffd82 !important;
+  background: #2d304711 !important;
+}
+
+/* Emphasis and strong: orange for strong, pink for em */
+strong, b {
+  color: #ff9b71 !important;
+}
+em, i {
+  color: #ed217c !important;
+}
+
+/* Inline code: yellow background, navy text */
+code {
+  background: #fffd82 !important;
+  color: #2d3047 !important;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+}
+
+/* Code blocks: navy background, yellow text, orange border */
+pre, pre code {
+  background: #2d3047 !important;
+  color: #fffd82 !important;
+  border: 2px solid #ff9b71;
+  border-radius: 6px;
+  padding: 1em;
+  margin: 1.5em 0;
+  overflow-x: auto;
+}
+
+/* Blockquotes: orange accent, yellow background, navy text */
+blockquote {
+  border-left: 6px solid #ff9b71;
+  background: #fffd8222;
+  color: #2d3047 !important;
+  padding: 0.7em 1.2em;
+  margin: 1.5em 0;
+  font-style: italic;
+}
+
+/* Lists: navy text, teal bullets */
+ul, ol {
+  color: #2d3047 !important;
+  margin-left: 2em;
+}
+ul li::marker, ol li::marker {
+  color: #1b998b;
+}
+
+/* Tables: navy header, yellow cells, orange borders */
+table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+th, td {
+  border: 1.5px solid #ff9b71;
+  padding: 0.5em 1em;
+}
+th {
+  background: #2d3047;
+  color: #fffd82;
+}
+td {
+  background: #fffd82;
+  color: #2d3047;
+}
+
+/* Horizontal rules: pink */
+hr {
+  border: 1.5px solid #ed217c;
+}
+
+/* Selection */
+::selection {
+  background: #ed217c;
+  color: #fffd82;
+}
+
+/* Buttons, Inputs, UI elements */
+button, input, select, textarea {
+  background: #fffd82 !important;
+  color: #2d3047 !important;
+  border: 1.5px solid #ed217c;
+  border-radius: 3px;
+  padding: 0.3em 0.6em;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+  background: #1b998b;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d3047;
+  border-radius: 6px;
+}
