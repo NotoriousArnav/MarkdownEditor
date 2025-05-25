@@ -30,9 +30,12 @@ const HistoryViewer = lazy(() => import("@/components/HistoryViewer").then(modul
 const FetchFromHTTP = lazy(() => import("@/components/FetchFromHTTP").then(module => ({ default: module.FetchFromHTTP })));
 
 export const MarkdownEditor = () => {
+  window.yame = {
+    extensions: []
+  };
   const [markdown, setMarkdown] = useState<string>(() => {
     const saved = localStorage.getItem("markdown-content");
-    return saved || "# Hello World\n\nStart writing your markdown here...";
+    return saved || "# Hello Yame\n\nStart writing your markdown here...\n\nVisit [Yame Repo](https://github.com/NotoriousArnav/MarkdownEditor) for more info.";
   });
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isFetchDialogOpen, setShowFetchDialog] = useState(false);
@@ -96,7 +99,6 @@ export const MarkdownEditor = () => {
       localStorage.setItem("firstTime", "false");
     }
   }, []);
-
 
   // Update history control states
   useEffect(() => {
@@ -564,9 +566,56 @@ export const MarkdownEditor = () => {
     setIsPreviewMode(!isPreviewMode);
   });
 
+  useHotkeys('ctrl+shift+f', (e) => {
+    e.preventDefault();
+    setShowFetchDialog(true);
+  });
+
+  // TODO: Add a Extension Manager that can extend the editor's functionality with plugins
+  const extensionManager = async (extension: string, callback?) => {
+    // User will provde a URL to the extension
+    // This function will import the `YameExt` object that the extension provides and call its `init` method then append the extension object to the `window.yame.extensions` array
+    // The Extension's init should return false if the function fails to run, else it's a void function
+    
+    if (!callback) {
+      callback = console.log
+    }
+
+    if (!extension) {
+      callback({
+        title: "Extension Error",
+        description: "No extension URL provided.",
+      })
+    }
+
+    try {
+      const module = await import(/* @vite-ignore */ extension);
+      if (!module){
+        callback({
+          title: "Extension Error",
+          description: "Could not import the extension module.",
+        });
+        return;
+      }
+      const YameExt = module.YameExt.YameExt;
+      yame.extensions.push(YameExt);
+
+      YameExt.init();
+      
+    } catch (error) {
+      console.error("Error loading extension:", error);
+      callback({
+        title: "Extension Error",
+        description: "Could not load the extension. Please check the console for more details.",
+      });
+      return;
+    }
+  }
+
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   window.yame = {
+    ...window.yame,
     handleToolbarAction,
     handleSaveToLocalStorage,
     handleExportPDF,
@@ -575,9 +624,10 @@ export const MarkdownEditor = () => {
     handleShareDocument,
     fetchFromUrl,
     shareFile,
-    toast
+    toast,
+    extensionManager,
   }
-
+ 
   return (
     <Suspense fallback={<Loading />}>
       <div className="flex flex-col h-full overflow-hidden">
@@ -650,7 +700,15 @@ export const MarkdownEditor = () => {
           initialFilename={`yame-document-${Math.random().toString(36).substring(2, 8)}.md`}
         />
 
-        <input id="fileOpen" type="file" accept=".md" onChange={handleFileUpload} style={{ display: "none" }} />
+        <input
+          id="fileOpen"
+          type="file"
+          accept=".md"
+          onChange={handleFileUpload}
+          style={
+            { display: "none" }
+          }
+        />
       </div>
     </Suspense>
   );
