@@ -1,10 +1,9 @@
-
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Bold, Italic, Heading1, Heading2, Heading3, Link, Image, Code, Quote, List, ListOrdered,
   Trash2, Save, Eye, Edit, Undo, Redo, History, Download, Palette, Keyboard, FileText, Github,
-  FolderOpen, CloudDownload, Share, CodeXml
+  FolderOpen, CloudDownload, Share, CodeXml, Blocks
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useToast } from "@/components/ui/use-toast";
@@ -47,6 +46,7 @@ export const EditorToolbar = ({ onAction, isPreviewMode }: EditorToolbarProps) =
   const extraActions: { icon: JSX.Element; name: string; tooltip: string; className?: string }[] = [
     { icon: <Share size={24} />, name: "share", tooltip: "Share", className: "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300" },
     { icon: <Palette size={24} />, name: "theme", tooltip: "Change Markdown Theme" },
+    { icon: <Blocks size={24} />, name: "extensions", tooltip: "Manage Extensions" },
     { icon: <Eye size={24} />, name: "preview", tooltip: "Preview" },
     { icon: <FileText size={24} />, name: "pdfexport", tooltip: "Export PDF" },
     { icon: <CodeXml size={24} />, name: "htmlexport", tooltip: "Export HTML" },

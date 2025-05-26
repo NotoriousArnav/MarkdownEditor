@@ -22,6 +22,8 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useHotkeys } from "@/hooks/useHotkeys";
 import { inlineAllStyles, fetchFromUrl, shareFile } from "@/lib/utils";
 import { ShareDialog } from "@/components/ShareDialog"; // Import the ShareDialog component
+import { extMan } from "@/lib/extMan";
+import { ExtensionManager } from "@/components/ExtensionManager";
 
 // Dynamically import components that aren't needed on initial load
 const MarkdownPreview = lazy(() => import("@/components/MarkdownPreview").then(module => ({ default: module.MarkdownPreview })));
@@ -31,7 +33,7 @@ const FetchFromHTTP = lazy(() => import("@/components/FetchFromHTTP").then(modul
 
 export const MarkdownEditor = () => {
   window.yame = {
-    extensions: []
+    extensions: JSON.parse(localStorage.getItem("yame_extensions") || "[]"),
   };
   const [markdown, setMarkdown] = useState<string>(() => {
     const saved = localStorage.getItem("markdown-content");
@@ -48,6 +50,8 @@ export const MarkdownEditor = () => {
   const [markdownTheme, setMarkdownTheme] = useState<MarkdownTheme>(() => {
     return (localStorage.getItem("markdown-theme") as MarkdownTheme) || "github";
   });
+  const [extManagerOpen, setExtManagerOpen] = useState(false);
+  const [selectedExtension, setSelectedExtension] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { toast } = useToast();
@@ -115,6 +119,30 @@ export const MarkdownEditor = () => {
   useEffect(() => {
     localStorage.setItem("markdown-theme", markdownTheme);
   }, [markdownTheme]);
+
+  // Load and initialize extensions on mount
+  useEffect(() => {
+    const loadExtensions = async () => {
+      const urls = extMan.getExtensionUrls();
+      for (const url of urls) {
+        const mod = await extMan.loadExtension(url);
+        if (mod && mod.YameExt && typeof mod.YameExt.init === 'function') {
+          try {
+            mod.YameExt.init();
+          } catch (e) {
+            console.error(`Extension at ${url} failed to initialize`, e);
+          }
+        }
+      }
+    };
+    loadExtensions();
+  }, []);
+
+  // Expose extension manager to window.yame
+  // @ts-ignore
+  if (!window.yame) window.yame = {};
+  // @ts-ignore
+  window.yame.extMan = extMan;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
@@ -232,6 +260,7 @@ export const MarkdownEditor = () => {
     })
   }
 
+  // Add a toolbar action to open the extension manager
   const handleToolbarAction = (action: string) => {
     const textarea = textareaRef.current;
 
@@ -259,6 +288,9 @@ export const MarkdownEditor = () => {
         return;
       case "htmlexport":
         handleExportHTML();
+        return;
+      case "extensions":
+        setExtManagerOpen(true);
         return;
       default:
         break;
@@ -571,51 +603,11 @@ export const MarkdownEditor = () => {
     setShowFetchDialog(true);
   });
 
-  // TODO: Add a Extension Manager that can extend the editor's functionality with plugins
-  const extensionManager = async (extension: string, callback?) => {
-    // User will provde a URL to the extension
-    // This function will import the `YameExt` object that the extension provides and call its `init` method then append the extension object to the `window.yame.extensions` array
-    // The Extension's init should return false if the function fails to run, else it's a void function
-    
-    if (!callback) {
-      callback = console.log
-    }
-
-    if (!extension) {
-      callback({
-        title: "Extension Error",
-        description: "No extension URL provided.",
-      })
-    }
-
-    try {
-      const module = await import(/* @vite-ignore */ extension);
-      if (!module){
-        callback({
-          title: "Extension Error",
-          description: "Could not import the extension module.",
-        });
-        return;
-      }
-      const YameExt = module.YameExt.YameExt;
-      yame.extensions.push(YameExt);
-
-      YameExt.init();
-      
-    } catch (error) {
-      console.error("Error loading extension:", error);
-      callback({
-        title: "Extension Error",
-        description: "Could not load the extension. Please check the console for more details.",
-      });
-      return;
-    }
-  }
-
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   window.yame = {
     ...window.yame,
+    extMan,
     handleToolbarAction,
     handleSaveToLocalStorage,
     handleExportPDF,
@@ -625,7 +617,6 @@ export const MarkdownEditor = () => {
     fetchFromUrl,
     shareFile,
     toast,
-    extensionManager,
   }
  
   return (
@@ -698,6 +689,12 @@ export const MarkdownEditor = () => {
           onClose={handleShareDialogClose}
           onShare={handleShareDocument}
           initialFilename={`yame-document-${Math.random().toString(36).substring(2, 8)}.md`}
+        />
+
+        <ExtensionManager
+          isOpen={extManagerOpen}
+          onClose={() => setExtManagerOpen(false)}
+          setExtension={setSelectedExtension}
         />
 
         <input
