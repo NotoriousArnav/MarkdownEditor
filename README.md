@@ -1,7 +1,8 @@
 # YAME: Yet another Markdown Editor
 YAME is a simple and lightweight Markdown editor built with React. It allows users to write and preview Markdown content in real-time.
 
-> **Baptism of Code Ongoing, to remove the sins of the developer, future commits may contain breaking Changes**
+> **Baptism of Code Ongoing, to remove the sins of the developer, future commits may contain breaking Changes.**
+>
 > **Quickstart Guide on Making Extensions are now provided. Read [MAKING_EXTENSIONS.md](MAKING_EXTENSIONS.md)**
 
 ![Screenshot](public/screenshot-1.png)
@@ -36,7 +37,7 @@ To get started with Yame, open [Yame](https://notoriousarnav.github.io/MarkdownE
 ## Note for Theme Developers
 - There is no official Documentation for the Theme Selector. If you want to make a custom theme, please refer to [MAKING_THEMES.md](MAKING_THEMES.md) for a quickstart and see [public/space-cadet.css](public/space-cadet.css) for a real-world example.
 - If you think the existing theme API is not sufficient, please open an issue and provide details or a PR.
-
+- Have a look at [This Marketplace Repo](https://github.com/BroCode501/YameMarketplace.git) which contains themes and extensions for 
 ## Contributing
 View the [CONTRIBUTING.md](CONTRIBUTING.md) file for details on how to contribute to ths project.
 
