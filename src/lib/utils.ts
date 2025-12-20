@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-const SWFTInstance = import.meta.env.VITE_SWFT_INSTANCE || "https://share.nnisarg.in/";
+const SWFTInstance = import.meta.env.VITE_SWFT_INSTANCE || "https://shareb.in/";
 
 // @ts-ignore
 // eslint-disable-next-line
@@ -50,7 +50,15 @@ export async function shareFile(
     const formData = new FormData();
     const file = new File([data], name, { type: 'text/markdown' });
     formData.append('file', file);
-    formData.append('time', expiry_time);
+    // shareb.in expects expiry as a number (hours)
+    formData.append('expiry', expiry_time);
+    
+    // Generate a custom code that includes the filename
+    // Add random string to avoid collisions and make it URL-safe
+    const randomString = Math.random().toString(36).substring(2, 8);
+    const sanitizedFilename = name.replace(/[^a-zA-Z0-9._-]/g, '-');
+    const customCode = `${randomString}-${sanitizedFilename}`;
+    formData.append('custom_code', customCode);
 
     const response = await axios.post(instance, formData, {
       headers: {
@@ -59,15 +67,22 @@ export async function shareFile(
       },
     });
 
+    // shareb.in returns: { detail: "...", data: { filename, url, expiry } }
+    // Extract the URL which now includes the custom code with filename
+    if (response.data && response.data.data && response.data.data.url) {
+      return response.data.data.url;
+    }
+    
+    // Fallback to raw response for compatibility with other services
     return response.data;
 
   } catch (error: any) {
     toast({
       title: `Could not share file`,
-      description: `Error: ${error.response.data}`,
+      description: `Error: ${error.response?.data || error.message}`,
       variant: 'destructive',
     });
-    console.error("Error sharing file:", error.response.data);
+    console.error("Error sharing file:", error.response?.data || error.message);
     return undefined;
   }
 }

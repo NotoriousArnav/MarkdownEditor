@@ -57,7 +57,7 @@ npm i
 ```
 
 ### Changing the SWFT Instance
-The Default SWFT Instance is `https://share.nnisarg.in`
+The Default SWFT Instance is `https://shareb.in`
 To change the SWFT Instance run:
 ```bash
 export VITE_SWFT_INSTANCE="https://someinstance.com"
